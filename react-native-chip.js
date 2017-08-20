@@ -37,11 +37,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50,
     backgroundColor: '#e0e0e0',
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    height: 30,
-    marginBottom: 5,
-    marginRight: 5
+    height: 28,
+    marginBottom: 4,
+    marginRight: 4
   },
   container: {
     flexDirection: 'row',
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   iconWrapper: {
     borderRadius: 50,
     backgroundColor: '#a6a6a6',
-    height: 18,
-    width: 18,
+    height: 16,
+    width: 16,
     overflow: 'hidden',
     marginLeft: 4,
     justifyContent: 'center',
