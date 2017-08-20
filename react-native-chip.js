@@ -19,12 +19,14 @@ export default class ReactNativeChip extends React.Component {
 
     return (
       <View style={styles.root}>
-        <Text style={styles.text}>{text}</Text>
-        <TouchableOpacity
-          style={styles.iconWrapper}
-          onPress={onClose}>
-          <Text style={[styles.icon, this.isIOS ? styles.iconIOS : styles.iconAndroid]}>✕</Text>
-        </TouchableOpacity>
+        <View style={styles.container}>
+          <Text style={styles.text} numberOfLines={1}>{text}</Text>
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={onClose}>
+            <Text style={[styles.icon, this.isIOS ? styles.iconIOS : styles.iconAndroid]}>✕</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -32,17 +34,20 @@ export default class ReactNativeChip extends React.Component {
 
 const styles = StyleSheet.create({
   root: {
-    flexDirection: 'row',
+    justifyContent: 'center',
     borderRadius: 50,
     backgroundColor: '#e0e0e0',
-    overflow: 'hidden',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
     height: 30,
     marginBottom: 5,
     marginRight: 5
+  },
+  container: {
+    flexDirection: 'row',
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   text: {
     color: 'rgba(0, 0, 0, 0.87)'
