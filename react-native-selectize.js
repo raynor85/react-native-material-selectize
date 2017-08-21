@@ -55,7 +55,7 @@ export default class ReactNativeSelectize extends React.Component {
   }
 
   _call() {
-    const [ callback, ...params ] = arguments;
+    const [callback, ...params] = arguments;
 
     if (typeof callback === 'function') {
       return callback(...params);
@@ -103,7 +103,7 @@ export default class ReactNativeSelectize extends React.Component {
   _onChipClose = text => {
     const { selectedItems } = this.state;
 
-    selectedItems.result = selectedItems.result.filter(item => item !== text)
+    selectedItems.result = selectedItems.result.filter(item => item !== text);
     delete selectedItems.entities[text];
     this.setState({ selectedItems });
   };
@@ -130,19 +130,24 @@ export default class ReactNativeSelectize extends React.Component {
     const { error } = this.props;
     const { hasFocus } = this.state;
 
-    return error || hasFocus
-      ? { borderBottomWidth: 2, paddingBottom: 1 }
-      : { borderBottomWidth: 0.5, paddingBottom: 2.5 };
+    return error || hasFocus ?
+      { borderBottomWidth: 2, paddingBottom: 1 } :
+      { borderBottomWidth: 0.5, paddingBottom: 2.5 };
   };
 
   render() {
-    const { containerStyle, style, textInputProps, errorColor, tintColor, baseColor, label, error } = this.props;
-    const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, ...otherTextInputProps } = textInputProps;
-    const { hasFocus, selectedItems, text, textWidth } = this.state;
+    const { containerStyle, textInputProps, errorColor, tintColor, label, error } = this.props;
+    const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur,
+            ...otherTextInputProps } = textInputProps;
+    const { selectedItems, text, textWidth } = this.state;
     const rootStyle = { paddingTop: 16, paddingBottom: 10, ...containerStyle };
-    const inputContainerStyle = [styles.inputContainer, { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() }];
+    const inputContainerStyle = [
+      styles.inputContainer, { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() }
+    ];
     const labelStyle = [styles.label, { color: this._getColor() }];
-    const textInputStyle = { ...StyleSheet.flatten(styles.textInput), ...textInputStyleFromProps, minWidth: textWidth > 40 ? textWidth : 40 };
+    const textInputStyle = {
+      ...StyleSheet.flatten(styles.textInput), ...textInputStyleFromProps, minWidth: textWidth > 40 ? textWidth : 40
+    };
     const hiddenTextStyle = { ...textInputStyle, minWidth: 0, position: 'absolute', zIndex: -1, height: 0 };
 
     return (

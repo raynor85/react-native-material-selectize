@@ -67,8 +67,7 @@ const styles = StyleSheet.create({
     color: '#e0e0e0'
   },
   iconIOS: {
-    fontSize: 14,
-
+    fontSize: 14
   },
   iconAndroid: {
     fontSize: 13,
