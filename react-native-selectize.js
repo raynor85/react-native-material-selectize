@@ -11,8 +11,10 @@ export default class ReactNativeSelectize extends React.Component {
     style: {},
     textInputProps: {},
     textStyle: {},
+    errorColor: 'rgb(213, 0, 0)',
     tintColor: 'rgb(0, 145, 234)',
-    baseColor: 'rgba(0, 0, 0, .38)'
+    baseColor: 'rgba(0, 0, 0, .38)',
+    error: ''
   };
 
   constructor(props) {
@@ -40,23 +42,39 @@ export default class ReactNativeSelectize extends React.Component {
     };
   }
 
-  call() {
+  focus = () => {
+    this._textInput.focus();
+  }
+
+  blur = () => {
+    this._textInput.blur();
+  }
+
+  submit = () => {
+    this._onSubmitEditing(this.props.textInputProps.onSubmitEditing);
+  }
+
+  _call() {
     const [ callback, ...params ] = arguments;
 
     if (typeof callback === 'function') {
-      callback(...params);
+      return callback(...params);
     }
   }
 
-  onChangeText = (text, callback) => {
-    this.call(callback, text);
+  _onChangeText = (text, callback) => {
+    if (this._call(callback, text) === false) {
+      return;
+    }
     this.setState({ text });
-  }
+  };
 
-  onSubmitEditing = callback => {
+  _onSubmitEditing = callback => {
     const { text, selectedItems } = this.state;
 
-    this.call(callback, text);
+    if (this._call(callback, text) === false) {
+      return;
+    }
     if (text === '') {
       return;
     }
@@ -66,67 +84,88 @@ export default class ReactNativeSelectize extends React.Component {
       selectedItems.entities[text] = { id: text };
     }
     this.setState({ text: '' });
-  }
+  };
 
-  onFocus = callback => {
+  _onFocus = callback => {
     const { text } = this.state;
 
-    this.call(callback, text);
+    this._call(callback, text);
     this.setState({ hasFocus: true });
-  }
+  };
 
-  onBlur = callback => {
+  _onBlur = callback => {
     const { text } = this.state;
 
-    this.call(callback, text);
+    this._call(callback, text);
     this.setState({ hasFocus: false });
-  }
+  };
 
-  onChipClose = text => {
+  _onChipClose = text => {
     const { selectedItems } = this.state;
 
     selectedItems.result = selectedItems.result.filter(item => item !== text)
     delete selectedItems.entities[text];
     this.setState({ selectedItems });
-  }
+  };
 
-  onLayout = e => {
+  _onLayout = e => {
     const { width } = e.nativeEvent.layout;
     this.setState({ textWidth: width });
-  }
+  };
+
+  _getColor = () => {
+    const { errorColor, tintColor, baseColor, error } = this.props;
+    const { hasFocus } = this.state;
+
+    if (error) {
+      return errorColor;
+    }
+    if (hasFocus) {
+      return tintColor;
+    }
+    return baseColor;
+  };
+
+  _getLineStyleVariant = () => {
+    const { error } = this.props;
+    const { hasFocus } = this.state;
+
+    return error || hasFocus
+      ? { borderBottomWidth: 2, paddingBottom: 1 }
+      : { borderBottomWidth: 0.5, paddingBottom: 2.5 };
+  };
 
   render() {
-    const { style, textInputProps, tintColor, baseColor, label } = this.props;
+    const { containerStyle, style, textInputProps, errorColor, tintColor, baseColor, label, error } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, ...otherTextInputProps } = textInputProps;
     const { hasFocus, selectedItems, text, textWidth } = this.state;
-    const rootStyle = [styles.root, hasFocus
-      ? { borderBottomColor: tintColor, borderBottomWidth: 2, paddingBottom: 1 }
-      : { borderBottomColor: baseColor, borderBottomWidth: 0.5, paddingBottom: 2.5 }
-    ];
-    const labelStyle = [styles.label, { color: hasFocus ? tintColor : baseColor }];
+    const rootStyle = { paddingTop: 16, paddingBottom: 10, ...containerStyle };
+    const inputContainerStyle = [styles.inputContainer, { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() }];
+    const labelStyle = [styles.label, { color: this._getColor() }];
     const textInputStyle = { ...StyleSheet.flatten(styles.textInput), ...textInputStyleFromProps, minWidth: textWidth > 40 ? textWidth : 40 };
     const hiddenTextStyle = { ...textInputStyle, minWidth: 0, position: 'absolute', zIndex: -1, height: 0 };
 
     return (
-      <View style={rootStyle}>
+      <View style={[rootStyle, error && { paddingBottom: rootStyle.paddingBottom - 10 }]}>
         {label && <Text style={labelStyle}>{label}</Text>}
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+        <View style={inputContainerStyle}>
           {selectedItems.result.map(text =>
             <Chip
-              onClose={() => this.onChipClose(text)}
+              onClose={() => this._onChipClose(text)}
               key={text}
               text={text}
             />)
           }
           <TextInput
+            ref={c => this._textInput = c}
             value={text}
             autoCapitalize={'none'}
             autoCorrect={false}
             blurOnSubmit={false}
-            onChangeText={text => this.onChangeText(text, onChangeText)}
-            onSubmitEditing={() => this.onSubmitEditing(onSubmitEditing)}
-            onFocus={() => this.onFocus(onFocus)}
-            onBlur={() => this.onBlur(onBlur)}
+            onChangeText={text => this._onChangeText(text, onChangeText)}
+            onSubmitEditing={() => this._onSubmitEditing(onSubmitEditing)}
+            onFocus={() => this._onFocus(onFocus)}
+            onBlur={() => this._onBlur(onBlur)}
             selectionColor={tintColor}
             style={textInputStyle}
             underlineColorAndroid={'transparent'}
@@ -135,9 +174,13 @@ export default class ReactNativeSelectize extends React.Component {
         </View>
         <Text
           style={hiddenTextStyle}
-          onLayout={this.onLayout}>
+          onLayout={this._onLayout}>
           {text}
         </Text>
+        {!!error && <Text
+          style={[styles.helper, { color: errorColor }]}>
+          {error}
+        </Text>}
       </View>
     );
   }
@@ -145,8 +188,16 @@ export default class ReactNativeSelectize extends React.Component {
 
 const styles = StyleSheet.create({
   root: {
-    marginVertical: 10,
-    paddingBottom: 2
+    paddingTop: 16,
+    paddingBottom: 10
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  helper: {
+    fontSize: 12,
+    marginVertical: 4
   },
   label: {
     marginBottom: 4,
