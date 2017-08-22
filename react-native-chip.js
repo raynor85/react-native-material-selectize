@@ -6,7 +6,7 @@ import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 export default class ReactNativeChip extends React.Component {
   static defaultProps = {
     onClose: () => {},
-    text: 'John Doe'
+    text: ''
   };
 
   constructor(props) {

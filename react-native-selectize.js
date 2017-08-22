@@ -1,13 +1,28 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { ListView, StyleSheet, Text, TextInput, View } from 'react-native';
 import Chip from './react-native-chip';
 
 export default class ReactNativeSelectize extends React.Component {
   static defaultProps = {
     onPress: () => {},
-    items: [],
+    items: {
+      result: [
+        'JohnDoe@gmail.com',
+        'RubenRizzi@f1000.com',
+        'GiovanniCasnici@canna.com',
+        'FabianPiau@french.fr',
+        'SanjeSanjennaro@gianni.it'
+      ],
+      entities: {
+        'JohnDoe@gmail.com': { id: 'JohnDoe@gmail.com' },
+        'RubenRizzi@f1000.com': { id: 'RubenRizzi@f1000.com' },
+        'GiovanniCasnici@canna.com': { id: 'GiovanniCasnici@canna.com' },
+        'FabianPiau@french.fr': { id: 'FabianPiau@french.fr' },
+        'SanjeSanjennaro@gianni.it': { id: 'SanjeSanjennaro@gianni.it' }
+      }
+    },
     style: {},
     textInputProps: {},
     textStyle: {},
@@ -21,25 +36,20 @@ export default class ReactNativeSelectize extends React.Component {
     super(props);
     this.state = {
       hasFocus: this.props.textInputProps.autoFocus,
-      selectedItems: {
-        result: [
-          'JohnDoe@gmail.com',
-          'RubenRizzi@f1000.com',
-          'GiovanniCasnici@canna.com',
-          'FabianPiau@french.fr',
-          'SanjeSanjennaro@gianni.it'
-        ],
-        entities: {
-          'JohnDoe@gmail.com': { id: 'JohnDoe@gmail.com' },
-          'RubenRizzi@f1000.com': { id: 'RubenRizzi@f1000.com' },
-          'GiovanniCasnici@canna.com': { id: 'GiovanniCasnici@canna.com' },
-          'FabianPiau@french.fr': { id: 'FabianPiau@french.fr' },
-          'SanjeSanjennaro@gianni.it': { id: 'SanjeSanjennaro@gianni.it' }
-        }
-      },
+      items: this.props.items,
+      selectedItems: { result: [], entities: {} },
       text: '',
       textWidth: 0
     };
+    this.defaultTextInputProps = {
+      autoCapitalize: 'none',
+      autoCorrect: false,
+      blurOnSubmit: false
+    };
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.cancelBlur);
   }
 
   focus = () => {
@@ -47,7 +57,13 @@ export default class ReactNativeSelectize extends React.Component {
   }
 
   blur = () => {
+    const { onBlur } = this.props.textInputProps;
+    const { text } = this.state;
+
     this._textInput.blur();
+    clearInterval(this.cancelBlur);
+    this._call(onBlur, text);
+    this.setState({ hasFocus: false });
   }
 
   submit = () => {
@@ -89,6 +105,7 @@ export default class ReactNativeSelectize extends React.Component {
   _onFocus = callback => {
     const { text } = this.state;
 
+    clearInterval(this.cancelBlur);
     this._call(callback, text);
     this.setState({ hasFocus: true });
   };
@@ -96,8 +113,11 @@ export default class ReactNativeSelectize extends React.Component {
   _onBlur = callback => {
     const { text } = this.state;
 
-    this._call(callback, text);
-    this.setState({ hasFocus: false });
+    this.cancelBlur = setTimeout(() => {
+      this._call(callback, text);
+      // when the user tap on an item of the list, the state 'hasFocus' should stay true, so we use setTimeout
+      this.setState({ hasFocus: false });
+    }, 100);
   };
 
   _onChipClose = text => {
@@ -111,6 +131,69 @@ export default class ReactNativeSelectize extends React.Component {
   _onLayout = e => {
     const { width } = e.nativeEvent.layout;
     this.setState({ textWidth: width });
+  };
+
+  _selectItem = item => {
+    this.setState({ text: item }, this.submit);
+    this._textInput.focus();
+  };
+
+  _getRow = item => {
+    const textInputProps = { ...this.defaultTextInputProps, ...this.props.textInputProps };
+    const overlayProps = (({ autoCapitalize, autoCorrect, keyboardType }) => (
+      { autoCapitalize, autoCorrect, keyboardType }
+    ))(textInputProps);
+    // we need a TextInput overlay to get the focus immediately on tap
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ paddingVertical: 5 }}>
+          <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{item}</Text>
+        </View>
+        <TextInput
+          {...overlayProps}
+          selectionColor={'transparent'}
+          style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
+          value={''}
+          onFocus={() => this._selectItem(item)}
+          underlineColorAndroid={'transparent'}
+        />
+      </View>
+    );
+  };
+
+  _filterItems = searchTerm => {
+    const { items, selectedItems } = this.state;
+    const filteredItems = { result: [], entities: {} };
+
+    items.result.forEach(id => {
+      const parts = searchTerm.trim().split(/[ \-:]+/);
+      const regex = new RegExp(`(${parts.join('|')})`, 'ig');
+      if (!selectedItems.entities[id] && regex.test(items.entities[id].id)) {
+        filteredItems.result.push(id);
+        filteredItems.entities[id] = { id };
+      }
+    });
+    return filteredItems;
+  };
+
+  _renderItems = () => {
+    const { hasFocus } = this.state;
+    const searchTerm = this.state.text.trim();
+    const items = this._filterItems(searchTerm);
+    let component = null;
+
+    if (items.result.length && hasFocus) {
+      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+      const dataSource = ds.cloneWithRows(items.result);
+      component = (
+        <ListView
+          enableEmptySections
+          dataSource={dataSource}
+          renderRow={rowData => this._getRow(rowData)}
+        />
+      );
+    }
+    return component;
   };
 
   _getColor = () => {
@@ -137,7 +220,7 @@ export default class ReactNativeSelectize extends React.Component {
 
   render() {
     const { containerStyle, textInputProps, errorColor, tintColor, label, error } = this.props;
-    const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur,
+    const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
     const rootStyle = { paddingTop: 16, paddingBottom: 10, ...containerStyle };
@@ -163,18 +246,16 @@ export default class ReactNativeSelectize extends React.Component {
           }
           <TextInput
             ref={c => this._textInput = c}
+            {... { ...this.defaultTextInputProps, ...otherTextInputProps }}
+            placeholder={selectedItems.result.length ? '' : placeholder}
+            underlineColorAndroid={'transparent'}
             value={text}
-            autoCapitalize={'none'}
-            autoCorrect={false}
-            blurOnSubmit={false}
             onChangeText={text => this._onChangeText(text, onChangeText)}
             onSubmitEditing={() => this._onSubmitEditing(onSubmitEditing)}
             onFocus={() => this._onFocus(onFocus)}
             onBlur={() => this._onBlur(onBlur)}
             selectionColor={tintColor}
             style={textInputStyle}
-            underlineColorAndroid={'transparent'}
-            {...otherTextInputProps}
           />
         </View>
         <Text
@@ -186,6 +267,7 @@ export default class ReactNativeSelectize extends React.Component {
           style={[styles.helper, { color: errorColor }]}>
           {error}
         </Text>}
+        {this._renderItems()}
       </View>
     );
   }
