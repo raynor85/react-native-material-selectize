@@ -145,14 +145,14 @@ export default class ReactNativeSelectize extends React.Component {
     ))(textInputProps);
     // we need a TextInput overlay to get the focus immediately on tap
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View>
         <View style={{ paddingVertical: 5 }}>
           <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{item}</Text>
         </View>
         <TextInput
           {...overlayProps}
           selectionColor={'transparent'}
-          style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
+          style={{ fontSize: 1, position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
           value={''}
           onFocus={() => this._selectItem(item)}
           underlineColorAndroid={'transparent'}
