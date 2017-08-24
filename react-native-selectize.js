@@ -64,8 +64,14 @@ export default class ReactNativeSelectize extends React.Component {
   }
 
   _getNormalizedItems = ({ itemId, items }) => {
+    let itemsCopy = [...items];
+    if (itemsCopy.every(item => typeof item === 'string')) {
+      itemsCopy = itemsCopy.reduce((acc, value) => {
+        return acc.concat({ [itemId]: value });
+      }, []);
+    }
     const itemSchema = new schema.Entity('item', undefined, { idAttribute: itemId });
-    let normalizedItems = normalize(items, [itemSchema]);
+    let normalizedItems = normalize(itemsCopy, [itemSchema]);
     if (!normalizedItems.entities.item) {
       normalizedItems.entities.item = {};
     }
