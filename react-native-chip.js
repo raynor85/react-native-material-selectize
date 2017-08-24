@@ -3,7 +3,7 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export default class ReactNativeChip extends React.Component {
+export default class ReactNativeChip extends React.PureComponent {
   static defaultProps = {
     onClose: () => {},
     text: ''

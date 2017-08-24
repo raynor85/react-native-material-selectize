@@ -2,27 +2,14 @@
 
 import React from 'react';
 import { ListView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
 
 export default class ReactNativeSelectize extends React.Component {
   static defaultProps = {
     onPress: () => {},
-    items: {
-      result: [
-        'JohnDoe@gmail.com',
-        'RubenRizzi@f1000.com',
-        'GiovanniCasnici@canna.com',
-        'FabianPiau@french.fr',
-        'SanjeSanjennaro@gianni.it'
-      ],
-      entities: {
-        'JohnDoe@gmail.com': { id: 'JohnDoe@gmail.com' },
-        'RubenRizzi@f1000.com': { id: 'RubenRizzi@f1000.com' },
-        'GiovanniCasnici@canna.com': { id: 'GiovanniCasnici@canna.com' },
-        'FabianPiau@french.fr': { id: 'FabianPiau@french.fr' },
-        'SanjeSanjennaro@gianni.it': { id: 'SanjeSanjennaro@gianni.it' }
-      }
-    },
+    itemId: 'id',
+    items: [],
     style: {},
     textInputProps: {},
     textStyle: {},
@@ -36,8 +23,8 @@ export default class ReactNativeSelectize extends React.Component {
     super(props);
     this.state = {
       hasFocus: this.props.textInputProps.autoFocus,
-      items: this.props.items,
-      selectedItems: { result: [], entities: {} },
+      items: this._getNormalizedItems(props),
+      selectedItems: { result: [], entities: { item: {} } },
       text: '',
       textWidth: 0
     };
@@ -50,6 +37,12 @@ export default class ReactNativeSelectize extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.cancelBlur);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const items = this._getNormalizedItems(nextProps);
+
+    this.setState({ items });
   }
 
   focus = () => {
@@ -70,6 +63,16 @@ export default class ReactNativeSelectize extends React.Component {
     this._onSubmitEditing(this.props.textInputProps.onSubmitEditing);
   }
 
+  _getNormalizedItems = ({ itemId, items }) => {
+    const itemSchema = new schema.Entity('item', undefined, { idAttribute: itemId });
+    let normalizedItems = normalize(items, [ itemSchema ]);
+    if (!normalizedItems.entities.item) {
+      normalizedItems.entities.item = {};
+    }
+
+    return normalizedItems;
+  }
+
   _call() {
     const [callback, ...params] = arguments;
 
@@ -86,7 +89,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _onSubmitEditing = callback => {
-    const { text, selectedItems } = this.state;
+    const { items, selectedItems, text } = this.state;
 
     if (this._call(callback, text) === false) {
       return;
@@ -95,9 +98,10 @@ export default class ReactNativeSelectize extends React.Component {
       return;
     }
 
-    if (!selectedItems.entities.hasOwnProperty(text)) {
+    if (!selectedItems.entities.item.hasOwnProperty(text)) {
+      const item = items.entities.item.hasOwnProperty(text) ? { ...items.entities.item[text] } : { id: text };
       selectedItems.result.push(text);
-      selectedItems.entities[text] = { id: text };
+      selectedItems.entities.item[text] = item;
     }
     this.setState({ text: '' });
   };
@@ -117,14 +121,14 @@ export default class ReactNativeSelectize extends React.Component {
       this._call(callback, text);
       // when the user tap on an item of the list, the state 'hasFocus' should stay true, so we use setTimeout
       this.setState({ hasFocus: false });
-    }, 100);
+    }, 150);
   };
 
   _onChipClose = text => {
     const { selectedItems } = this.state;
 
     selectedItems.result = selectedItems.result.filter(item => item !== text);
-    delete selectedItems.entities[text];
+    delete selectedItems.entities.item[text];
     this.setState({ selectedItems });
   };
 
@@ -133,12 +137,13 @@ export default class ReactNativeSelectize extends React.Component {
     this.setState({ textWidth: width });
   };
 
-  _selectItem = item => {
-    this.setState({ text: item }, this.submit);
+  _selectItem = id => {
+    this.setState({ text: id }, this.submit);
     this._textInput.focus();
   };
 
-  _getRow = item => {
+  _getRow = id => {
+    const { items } = this.state;
     const textInputProps = { ...this.defaultTextInputProps, ...this.props.textInputProps };
     const overlayProps = (({ autoCapitalize, autoCorrect, keyboardType }) => (
       { autoCapitalize, autoCorrect, keyboardType }
@@ -147,14 +152,15 @@ export default class ReactNativeSelectize extends React.Component {
     return (
       <View>
         <View style={{ paddingVertical: 5 }}>
-          <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{item}</Text>
+          <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{items.entities.item[id].name}</Text>
+          <Text style={{ color: 'rgba(0, 0, 0, 0.54)' }}>{id}</Text>
         </View>
         <TextInput
           {...overlayProps}
           selectionColor={'transparent'}
           style={{ fontSize: 1, position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
           value={''}
-          onFocus={() => this._selectItem(item)}
+          onFocus={() => this._selectItem(id)}
           underlineColorAndroid={'transparent'}
         />
       </View>
@@ -163,14 +169,14 @@ export default class ReactNativeSelectize extends React.Component {
 
   _filterItems = searchTerm => {
     const { items, selectedItems } = this.state;
-    const filteredItems = { result: [], entities: {} };
+    const filteredItems = { result: [], entities: { item: {} } };
 
     items.result.forEach(id => {
       const parts = searchTerm.trim().split(/[ \-:]+/);
       const regex = new RegExp(`(${parts.join('|')})`, 'ig');
-      if (!selectedItems.entities[id] && regex.test(items.entities[id].id)) {
+      if (!selectedItems.entities.item[id] && regex.test(items.entities.item[id].id)) {
         filteredItems.result.push(id);
-        filteredItems.entities[id] = { id };
+        filteredItems.entities.item[id] = { ...items.entities.item[id] };
       }
     });
     return filteredItems;
@@ -237,11 +243,11 @@ export default class ReactNativeSelectize extends React.Component {
       <View style={[rootStyle, error && { paddingBottom: rootStyle.paddingBottom - 10 }]}>
         {label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
-          {selectedItems.result.map(text =>
+          {selectedItems.result.map(id =>
             <Chip
-              onClose={() => this._onChipClose(text)}
-              key={text}
-              text={text}
+              onClose={() => this._onChipClose(id)}
+              key={id}
+              text={selectedItems.entities.item[id].name || id}
             />)
           }
           <TextInput
