@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { ListView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
 
@@ -35,14 +35,14 @@ export default class ReactNativeSelectize extends React.Component {
     };
   }
 
-  componentWillUnmount() {
-    clearInterval(this.cancelBlur);
-  }
-
   componentWillReceiveProps(nextProps) {
     const items = this._getNormalizedItems(nextProps);
 
     this.setState({ items });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.cancelBlur);
   }
 
   focus = () => {
@@ -65,11 +65,10 @@ export default class ReactNativeSelectize extends React.Component {
 
   _getNormalizedItems = ({ itemId, items }) => {
     const itemSchema = new schema.Entity('item', undefined, { idAttribute: itemId });
-    let normalizedItems = normalize(items, [ itemSchema ]);
+    let normalizedItems = normalize(items, [itemSchema]);
     if (!normalizedItems.entities.item) {
       normalizedItems.entities.item = {};
     }
-
     return normalizedItems;
   }
 
@@ -148,22 +147,15 @@ export default class ReactNativeSelectize extends React.Component {
     const overlayProps = (({ autoCapitalize, autoCorrect, keyboardType }) => (
       { autoCapitalize, autoCorrect, keyboardType }
     ))(textInputProps);
-    // we need a TextInput overlay to get the focus immediately on tap
+
     return (
-      <View>
-        <View style={{ paddingVertical: 5 }}>
-          <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{items.entities.item[id].name}</Text>
-          <Text style={{ color: 'rgba(0, 0, 0, 0.54)' }}>{id}</Text>
-        </View>
-        <TextInput
-          {...overlayProps}
-          selectionColor={'transparent'}
-          style={{ fontSize: 1, position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
-          value={''}
-          onFocus={() => this._selectItem(id)}
-          underlineColorAndroid={'transparent'}
-        />
-      </View>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        key={id}
+        onPress={() => this._selectItem(id)}
+        style={styles.listRow}>
+        <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
+      </TouchableOpacity>
     );
   };
 
@@ -189,14 +181,10 @@ export default class ReactNativeSelectize extends React.Component {
     let component = null;
 
     if (items.result.length && hasFocus) {
-      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-      const dataSource = ds.cloneWithRows(items.result);
       component = (
-        <ListView
-          enableEmptySections
-          dataSource={dataSource}
-          renderRow={rowData => this._getRow(rowData)}
-        />
+        <View style={styles.list}>
+          {items.result.map(id => this._getRow(id))}
+        </View>
       );
     }
     return component;
@@ -295,6 +283,23 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 4,
     fontSize: 12
+  },
+  list: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 2,
+    borderStyle: 'solid',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#e0e0e0',
+    shadowColor: '#e0e0e0',
+    shadowOffset: { height: 1, width: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 1
+  },
+  listRow: {
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 10
   },
   textInput: {
     flex: 1,
