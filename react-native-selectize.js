@@ -10,13 +10,20 @@ export default class ReactNativeSelectize extends React.Component {
     onPress: () => {},
     itemId: 'id',
     items: [],
-    style: {},
     textInputProps: {},
-    textStyle: {},
     errorColor: 'rgb(213, 0, 0)',
     tintColor: 'rgb(0, 145, 234)',
     baseColor: 'rgba(0, 0, 0, .38)',
-    error: ''
+    error: '',
+    renderRow: (id, item, onPress) => (
+      <TouchableOpacity
+        activeOpacity={0.6}
+        key={id}
+        onPress={onPress}
+        style={styles.listRow}>
+        <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
+      </TouchableOpacity>
+    )
   };
 
   constructor(props) {
@@ -94,6 +101,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _onSubmitEditing = callback => {
+    const { itemId } = this.props;
     const { items, selectedItems, text } = this.state;
 
     if (this._call(callback, text) === false) {
@@ -104,7 +112,7 @@ export default class ReactNativeSelectize extends React.Component {
     }
 
     if (!selectedItems.entities.item.hasOwnProperty(text)) {
-      const item = items.entities.item.hasOwnProperty(text) ? { ...items.entities.item[text] } : { id: text };
+      const item = items.entities.item.hasOwnProperty(text) ? { ...items.entities.item[text] } : { [itemId]: text };
       selectedItems.result.push(text);
       selectedItems.entities.item[text] = item;
     }
@@ -148,21 +156,10 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _getRow = id => {
+    const { renderRow } = this.props;
     const { items } = this.state;
-    const textInputProps = { ...this.defaultTextInputProps, ...this.props.textInputProps };
-    const overlayProps = (({ autoCapitalize, autoCorrect, keyboardType }) => (
-      { autoCapitalize, autoCorrect, keyboardType }
-    ))(textInputProps);
 
-    return (
-      <TouchableOpacity
-        activeOpacity={0.6}
-        key={id}
-        onPress={() => this._selectItem(id)}
-        style={styles.listRow}>
-        <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
-      </TouchableOpacity>
-    );
+    return renderRow(id, items.entities.item[id], () => this._selectItem(id));
   };
 
   _filterItems = searchTerm => {
@@ -172,7 +169,7 @@ export default class ReactNativeSelectize extends React.Component {
     items.result.forEach(id => {
       const parts = searchTerm.trim().split(/[ \-:]+/);
       const regex = new RegExp(`(${parts.join('|')})`, 'ig');
-      if (!selectedItems.entities.item[id] && regex.test(items.entities.item[id].id)) {
+      if (!selectedItems.entities.item[id] && regex.test(id)) {
         filteredItems.result.push(id);
         filteredItems.entities.item[id] = { ...items.entities.item[id] };
       }
@@ -242,8 +239,8 @@ export default class ReactNativeSelectize extends React.Component {
               onClose={() => this._onChipClose(id)}
               key={id}
               text={selectedItems.entities.item[id].name || id}
-            />)
-          }
+            />
+          )}
           <TextInput
             ref={c => this._textInput = c}
             {... { ...this.defaultTextInputProps, ...otherTextInputProps }}
