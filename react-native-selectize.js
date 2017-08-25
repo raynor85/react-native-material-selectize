@@ -23,6 +23,13 @@ export default class ReactNativeSelectize extends React.Component {
         style={styles.listRow}>
         <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
       </TouchableOpacity>
+    ),
+    renderChip: (id, item, onClose) => (
+      <Chip
+        key={id}
+        onClose={onClose}
+        text={id}
+      />
     )
   };
 
@@ -222,7 +229,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   render() {
-    const { containerStyle, textInputProps, errorColor, tintColor, label, error } = this.props;
+    const { containerStyle, textInputProps, errorColor, renderChip, tintColor, label, error } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
@@ -241,11 +248,7 @@ export default class ReactNativeSelectize extends React.Component {
         {label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
-            <Chip
-              onClose={() => this._onChipClose(id)}
-              key={id}
-              text={selectedItems.entities.item[id].name || id}
-            />
+            renderChip(id, selectedItems.entities.item[id], () => this._onChipClose(id))
           )}
           <TextInput
             ref={c => this._textInput = c}
