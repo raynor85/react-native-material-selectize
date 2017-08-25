@@ -77,6 +77,8 @@ export default class ReactNativeSelectize extends React.Component {
     this._onSubmitEditing(this.props.textInputProps.onSubmitEditing);
   }
 
+  getSelectedItems = () => this.state.selectedItems;
+
   _getNormalizedItems = ({ itemId, items }) => {
     let itemsCopy = [...items];
     if (itemsCopy.every(item => typeof item === 'string')) {
@@ -191,6 +193,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _renderItems = () => {
+    const { listStyle } = this.props;
     const { hasFocus } = this.state;
     const searchTerm = this.state.text.trim();
     const items = this._filterItems(searchTerm);
@@ -198,7 +201,7 @@ export default class ReactNativeSelectize extends React.Component {
 
     if (items.result.length && hasFocus) {
       component = (
-        <View style={styles.list}>
+        <View style={[styles.list, listStyle]}>
           {items.result.map(id => this._getRow(id))}
         </View>
       );
