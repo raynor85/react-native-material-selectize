@@ -15,20 +15,21 @@ export default class ReactNativeSelectize extends React.Component {
     tintColor: 'rgb(0, 145, 234)',
     baseColor: 'rgba(0, 0, 0, .38)',
     error: '',
-    renderRow: (id, item, onPress) => (
+    renderRow: (id, onPress, item, style) => (
       <TouchableOpacity
         activeOpacity={0.6}
         key={id}
         onPress={onPress}
-        style={styles.listRow}>
+        style={[styles.listRow, style]}>
         <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
       </TouchableOpacity>
     ),
-    renderChip: (id, item, onClose) => (
+    renderChip: (id, onClose, item, style) => (
       <Chip
         key={id}
         onClose={onClose}
         text={id}
+        style={style}
       />
     )
   };
@@ -171,10 +172,10 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _getRow = id => {
-    const { renderRow } = this.props;
+    const { listRowStyle, renderRow } = this.props;
     const { items } = this.state;
 
-    return renderRow(id, items.entities.item[id], () => this._selectItem(id));
+    return renderRow(id, () => this._selectItem(id), items.entities.item[id], listRowStyle);
   };
 
   _filterItems = searchTerm => {
@@ -232,7 +233,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   render() {
-    const { containerStyle, textInputProps, errorColor, renderChip, tintColor, label, error } = this.props;
+    const { chipStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor, label, error } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
@@ -251,7 +252,7 @@ export default class ReactNativeSelectize extends React.Component {
         {label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
-            renderChip(id, selectedItems.entities.item[id], () => this._onChipClose(id))
+            renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle)
           )}
           <TextInput
             ref={c => this._textInput = c}
