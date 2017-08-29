@@ -8,6 +8,7 @@ import Chip from './react-native-chip';
 export default class ReactNativeSelectize extends React.Component {
   static defaultProps = {
     onPress: () => {},
+    containerStyle: { paddingTop: 16, paddingBottom: 10 },
     itemId: 'id',
     items: [],
     textInputProps: {},
@@ -15,6 +16,7 @@ export default class ReactNativeSelectize extends React.Component {
     tintColor: 'rgb(0, 145, 234)',
     baseColor: 'rgba(0, 0, 0, .38)',
     error: '',
+    trimOnSubmit: true,
     renderRow: (id, onPress, item, style) => (
       <TouchableOpacity
         activeOpacity={0.6}
@@ -117,8 +119,9 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _onSubmitEditing = callback => {
-    const { itemId } = this.props;
-    const { items, selectedItems, text } = this.state;
+    const { itemId, trimOnSubmit } = this.props;
+    const { items, selectedItems } = this.state;
+    const text = trimOnSubmit ? this.state.text.trim() : this.state.text;
 
     if (this._call(callback, text) === false) {
       return;
@@ -129,6 +132,7 @@ export default class ReactNativeSelectize extends React.Component {
 
     if (!selectedItems.entities.item.hasOwnProperty(text)) {
       const item = items.entities.item.hasOwnProperty(text) ? { ...items.entities.item[text] } : { [itemId]: text };
+
       selectedItems.result.push(text);
       selectedItems.entities.item[text] = item;
     }
@@ -237,7 +241,6 @@ export default class ReactNativeSelectize extends React.Component {
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
-    const rootStyle = { paddingTop: 16, paddingBottom: 10, ...containerStyle };
     const inputContainerStyle = [
       styles.inputContainer, { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() }
     ];
@@ -248,7 +251,7 @@ export default class ReactNativeSelectize extends React.Component {
     const hiddenTextStyle = { ...textInputStyle, minWidth: 0, position: 'absolute', zIndex: -1, height: 0 };
 
     return (
-      <View style={[rootStyle, error && { paddingBottom: rootStyle.paddingBottom - 10 }]}>
+      <View style={containerStyle}>
         {label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
@@ -284,10 +287,6 @@ export default class ReactNativeSelectize extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    paddingTop: 16,
-    paddingBottom: 10
-  },
   inputContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap'

@@ -1,0 +1,46 @@
+{
+  "name": "react-native-material-selectize",
+  "version": "1.0.0",
+  "description": "A React Native component inspired to Selectize which follows Material Design guidelines.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raynor85/react-native-material-seletize.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "selectize",
+    "material",
+    "material-design"
+  ],
+  "author": "Ruben Rizzi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/raynor85/react-native-material-seletize/issues"
+  },
+  "homepage": "https://github.com/raynor85/react-native-material-seletize#readme",
+  "pre-commit": [
+    "lint"
+  ],
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "dependencies": {
+    "normalizr": "3.2.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "7.2.3",
+    "eslint": "4.5.0",
+    "eslint-plugin-react": "7.3.0",
+    "eslint-plugin-react-native": "3.0.1",
+    "pre-commit": "1.2.2",
+    "react": "15.6.1",
+    "react-native": "0.47.2"
+  }
+}
