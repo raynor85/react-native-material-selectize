@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/raynor85/react-native-material-seletize.git"
+    "url": "git+https://github.com/raynor85/react-native-material-selectize.git"
   },
   "keywords": [
     "react",
@@ -21,9 +21,9 @@
   "author": "Ruben Rizzi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/raynor85/react-native-material-seletize/issues"
+    "url": "https://github.com/raynor85/react-native-material-selectize/issues"
   },
-  "homepage": "https://github.com/raynor85/react-native-material-seletize#readme",
+  "homepage": "https://github.com/raynor85/react-native-material-selectize#readme",
   "pre-commit": [
     "lint"
   ],
