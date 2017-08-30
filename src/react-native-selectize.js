@@ -260,6 +260,7 @@ export default class ReactNativeSelectize extends React.Component {
           <TextInput
             ref={c => this._textInput = c}
             {... { ...this.defaultTextInputProps, ...otherTextInputProps }}
+            disableFullscreenUI={true}
             placeholder={selectedItems.result.length ? '' : placeholder}
             underlineColorAndroid={'transparent'}
             value={text}
