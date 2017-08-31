@@ -36,9 +36,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: '',
       isEnabled: false,
-      message: '',
+      message: ''
     };
   }
 
@@ -63,13 +62,13 @@ export default class App extends React.Component {
 
   render() {
     const { items } = this.props;
-    const { isEnabled, error, message } = this.state;
+    const { isEnabled, message } = this.state;
 
     return (
       <ScrollView
         contentContainerStyle={styles.container}
         style={styles.root}
-        keyboardShouldPersistTaps={'always'}>
+        keyboardShouldPersistTaps="always">
         <View>
           <EmailField
             ref={c => this._emailField = c}

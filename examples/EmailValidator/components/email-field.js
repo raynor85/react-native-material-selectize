@@ -43,7 +43,8 @@ export default class EmailField extends Component {
       this.setState({ error: 'Sorry, you can enter a maximum of 10 emails' });
       onSubmitEditing(false);
       return false;
-    } else if (email === '' && this.getSelectedEmails().length || (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email.trim())) {
+    } else if (email === '' && this.getSelectedEmails().length ||
+              (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/).test(email.trim())) {
       // http://www.w3resource.com/javascript/form/email-validation.php
       this.setState({ error: '' });
       onSubmitEditing(true);
@@ -61,7 +62,7 @@ export default class EmailField extends Component {
   onChipClose = onClose => {
     const { onChipClose } = this.props;
 
-    onChipClose(this.getSelectedEmails().length === 1 ? false : true);
+    onChipClose(this.getSelectedEmails().length === 1);
     onClose();
   }
 
