@@ -9,5 +9,8 @@
     "react": "16.0.0-alpha.12",
     "react-native": "0.47.2",
     "react-native-material-selectize": "latest"
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "3.0.2"
   }
 }

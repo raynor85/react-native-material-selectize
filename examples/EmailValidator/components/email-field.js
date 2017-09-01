@@ -13,7 +13,7 @@ export default class EmailField extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentValue: props.currentValue
+      error: ''
     };
   }
 
@@ -30,11 +30,6 @@ export default class EmailField extends Component {
   isErrored = () => {
     return !!this.state.error;
   }
-
-  handleTextChange = text => {
-    this.props.onNameChange(text, this.state.currentValue);
-    this.setState({ currentValue: text });
-  };
 
   validate = email => {
     const { onSubmitEditing } = this.props;
@@ -61,8 +56,9 @@ export default class EmailField extends Component {
 
   onChipClose = onClose => {
     const { onChipClose } = this.props;
+    const { error } = this.state;
 
-    onChipClose(this.getSelectedEmails().length === 1);
+    onChipClose(!error && this.getSelectedEmails().length > 1);
     onClose();
   }
 
