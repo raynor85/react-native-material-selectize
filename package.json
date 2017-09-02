@@ -24,23 +24,20 @@
     "url": "https://github.com/raynor85/react-native-material-selectize/issues"
   },
   "homepage": "https://github.com/raynor85/react-native-material-selectize#readme",
-  "pre-commit": [
-    "lint"
-  ],
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
   "dependencies": {
-    "normalizr": "3.2.3"
+    "normalizr": "3.2.3",
+    "prop-types": "15.5.10"
   },
   "devDependencies": {
     "babel-eslint": "7.2.3",
     "eslint": "4.5.0",
+    "eslint-plugin-jest": "20.0.3",
     "eslint-plugin-react": "7.3.0",
     "eslint-plugin-react-native": "3.0.1",
-    "eslint-plugin-jest": "20.0.3",
-    "pre-commit": "1.2.2",
     "react": "15.6.1",
     "react-native": "0.47.2"
   }

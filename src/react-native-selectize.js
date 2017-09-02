@@ -2,20 +2,36 @@
 
 import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import PropTypes from 'prop-types';
 import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
 
 export default class ReactNativeSelectize extends React.Component {
+  static propTypes = {
+    chipStyle: View.propTypes.style,
+    containerStyle: View.propTypes.style,
+    listStyle: View.propTypes.style,
+    listRowStyle: View.propTypes.style,
+    itemId: PropTypes.string,
+    items: PropTypes.array,
+    label: PropTypes.string,
+    error: PropTypes.string,
+    errorColor: PropTypes.string,
+    tintColor: PropTypes.string,
+    baseColor: PropTypes.string,
+    trimOnSubmit: PropTypes.bool,
+    renderRow: PropTypes.func,
+    renderChip: PropTypes.func,
+    textInputProps: PropTypes.object
+  };
+
   static defaultProps = {
-    onPress: () => {},
     containerStyle: { paddingTop: 16, paddingBottom: 10 },
     itemId: 'id',
     items: [],
-    textInputProps: {},
     errorColor: 'rgb(213, 0, 0)',
     tintColor: 'rgb(0, 145, 234)',
     baseColor: 'rgba(0, 0, 0, .38)',
-    error: '',
     trimOnSubmit: true,
     renderRow: (id, onPress, item, style) => (
       <TouchableOpacity
@@ -33,7 +49,8 @@ export default class ReactNativeSelectize extends React.Component {
         text={id}
         style={style}
       />
-    )
+    ),
+    textInputProps: {}
   };
 
   constructor(props) {
@@ -252,7 +269,7 @@ export default class ReactNativeSelectize extends React.Component {
 
     return (
       <View style={containerStyle}>
-        {label && <Text style={labelStyle}>{label}</Text>}
+        {!!label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
             renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle)
@@ -261,7 +278,7 @@ export default class ReactNativeSelectize extends React.Component {
             ref={c => this._textInput = c}
             {... { ...this.defaultTextInputProps, ...otherTextInputProps }}
             disableFullscreenUI={true}
-            placeholder={selectedItems.result.length ? '' : placeholder}
+            placeholder={selectedItems.result.length ? null : placeholder}
             underlineColorAndroid={'transparent'}
             value={text}
             onChangeText={text => this._onChangeText(text, onChangeText)}
@@ -277,10 +294,7 @@ export default class ReactNativeSelectize extends React.Component {
           onLayout={this._onLayout}>
           {text}
         </Text>
-        {!!error && <Text
-          style={[styles.helper, { color: errorColor }]}>
-          {error}
-        </Text>}
+        {!!error && <Text style={[styles.helper, { color: errorColor }]}>{error}</Text>}
         {this._renderItems()}
       </View>
     );

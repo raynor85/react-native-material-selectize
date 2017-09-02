@@ -7,11 +7,12 @@ Working examples are provided within the project. After downloading it, navigate
 
 ## Features
 
-* Material design [guidelines][md-textfield] compliance
+* Material design [guidelines](https://material.io/guidelines/components/text-fields.html) compliance
 * Consistent look and feel on iOS and Android
 * State transitions (normal, focused and errored)
 * Highly customizable styles and props of inner TextInput component
-* Only one dependency [normalizr](https://github.com/paularmstrong/normalizr)
+* Pure javascript implementation
+* Minimal setup (no props required)
 
 ## Installation
 The easiest way to install it is via npm. You need to have [node.js](https://nodejs.org/en/) installed.

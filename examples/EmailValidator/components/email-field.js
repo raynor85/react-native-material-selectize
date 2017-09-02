@@ -13,7 +13,7 @@ export default class EmailField extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: ''
+      error: null
     };
   }
 
@@ -41,7 +41,7 @@ export default class EmailField extends Component {
     } else if (email === '' && this.getSelectedEmails().length ||
               (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/).test(email.trim())) {
       // http://www.w3resource.com/javascript/form/email-validation.php
-      this.setState({ error: '' });
+      this.setState({ error: null });
       onSubmitEditing(true);
     } else {
       this.setState({ error: 'Please enter a valid email' });

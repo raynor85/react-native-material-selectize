@@ -24,7 +24,7 @@
     "react/prop-types": 0,
     "react/self-closing-comp": 2,
     "react/sort-comp": 2,
-    "react/sort-prop-types": 2,
+    "react/sort-prop-types": 0,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": [1, {
