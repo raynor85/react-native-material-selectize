@@ -26,7 +26,6 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   static defaultProps = {
-    containerStyle: { paddingTop: 16, paddingBottom: 10 },
     itemId: 'id',
     items: [],
     errorColor: 'rgb(213, 0, 0)',
@@ -98,6 +97,8 @@ export default class ReactNativeSelectize extends React.Component {
   }
 
   getSelectedItems = () => this.state.selectedItems;
+
+  getValue = () => this.state.text;
 
   _getNormalizedItems = ({ itemId, items }) => {
     let itemsCopy = [...items];
@@ -268,7 +269,7 @@ export default class ReactNativeSelectize extends React.Component {
     const hiddenTextStyle = { ...textInputStyle, minWidth: 0, position: 'absolute', zIndex: -1, height: 0 };
 
     return (
-      <View style={containerStyle}>
+      <View style={[styles.container, containerStyle]}>
         {!!label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
@@ -279,7 +280,7 @@ export default class ReactNativeSelectize extends React.Component {
             {... { ...this.defaultTextInputProps, ...otherTextInputProps }}
             disableFullscreenUI={true}
             placeholder={selectedItems.result.length ? null : placeholder}
-            underlineColorAndroid={'transparent'}
+            underlineColorAndroid="transparent"
             value={text}
             onChangeText={text => this._onChangeText(text, onChangeText)}
             onSubmitEditing={() => this._onSubmitEditing(onSubmitEditing)}
@@ -302,6 +303,10 @@ export default class ReactNativeSelectize extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 16,
+    paddingBottom: 10
+  },
   inputContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap'
