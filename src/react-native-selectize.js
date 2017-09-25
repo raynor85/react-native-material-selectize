@@ -6,6 +6,13 @@ import PropTypes from 'prop-types';
 import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
 
+const SHOWITEMS = {
+  ONFOCUS: 'onFocus',
+  ONTYPING: 'onTyping',
+  ALWAYS: 'always',
+  NEVER: 'never'
+};
+
 export default class ReactNativeSelectize extends React.Component {
   static propTypes = {
     chipStyle: View.propTypes.style,
@@ -19,6 +26,7 @@ export default class ReactNativeSelectize extends React.Component {
     errorColor: PropTypes.string,
     tintColor: PropTypes.string,
     baseColor: PropTypes.string,
+    showItems: PropTypes.oneOf([SHOWITEMS.ONFOCUS, SHOWITEMS.ONTYPING, SHOWITEMS.ALWAYS, SHOWITEMS.NEVER]),
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
     renderChip: PropTypes.func,
@@ -31,6 +39,7 @@ export default class ReactNativeSelectize extends React.Component {
     errorColor: 'rgb(213, 0, 0)',
     tintColor: 'rgb(0, 145, 234)',
     baseColor: 'rgba(0, 0, 0, .38)',
+    showItems: SHOWITEMS.ONFOCUS,
     trimOnSubmit: true,
     renderRow: (id, onPress, item, style) => (
       <TouchableOpacity
@@ -216,20 +225,31 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _renderItems = () => {
-    const { listStyle } = this.props;
-    const { hasFocus } = this.state;
-    const searchTerm = this.state.text.trim();
-    const items = this._filterItems(searchTerm);
-    let component = null;
+    const { listStyle, showItems } = this.props;
+    const { hasFocus, text } = this.state;
+    const items = this._filterItems(text.trim());
+    const itemComponent = (
+      <View style={[styles.list, listStyle]}>
+        {items.result.map(id => this._getRow(id))}
+      </View>
+    );
 
-    if (items.result.length && hasFocus) {
-      component = (
-        <View style={[styles.list, listStyle]}>
-          {items.result.map(id => this._getRow(id))}
-        </View>
-      );
+    switch (showItems) {
+      case SHOWITEMS.NEVER:
+        return null;
+
+      case SHOWITEMS.ALWAYS:
+        return items.result.length ? itemComponent : null;
+
+      case SHOWITEMS.ONFOCUS:
+        return items.result.length && hasFocus ? itemComponent : null;
+
+      case SHOWITEMS.ONTYPING:
+        return items.result.length && hasFocus && text ? itemComponent : null;
+
+      default:
+        return null;
     }
-    return component;
   };
 
   _getColor = () => {
