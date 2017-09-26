@@ -1,6 +1,6 @@
 {
   "name": "react-native-material-selectize",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A React Native component inspired to Selectize which follows Material Design guidelines.",
   "main": "index.js",
   "scripts": {
