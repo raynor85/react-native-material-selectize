@@ -16,6 +16,7 @@ const SHOWITEMS = {
 export default class ReactNativeSelectize extends React.Component {
   static propTypes = {
     chipStyle: View.propTypes.style,
+    chipIconStyle: View.propTypes.style,
     containerStyle: View.propTypes.style,
     listStyle: View.propTypes.style,
     listRowStyle: View.propTypes.style,
@@ -50,9 +51,10 @@ export default class ReactNativeSelectize extends React.Component {
         <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
       </TouchableOpacity>
     ),
-    renderChip: (id, onClose, item, style) => (
+    renderChip: (id, onClose, item, style, iconStyle) => (
       <Chip
         key={id}
+        iconStyle={iconStyle}
         onClose={onClose}
         text={id}
         style={style}
@@ -275,7 +277,8 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   render() {
-    const { chipStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor, label, error } = this.props;
+    const { chipStyle, chipIconStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor, label,
+            error } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
@@ -293,7 +296,7 @@ export default class ReactNativeSelectize extends React.Component {
         {!!label && <Text style={labelStyle}>{label}</Text>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
-            renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle)
+            renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle, chipIconStyle)
           )}
           <TextInput
             ref={c => this._textInput = c}

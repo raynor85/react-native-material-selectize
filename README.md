@@ -38,6 +38,7 @@ yarn add react-native-material-selectize
  name                 | description                                 | type     | default
 :-------------------- |:------------------------------------------- |:-------- |:------------------
  chipStyle            | Style of Chip component                     | Style    | -
+ chipIconStyle        | Style of Chip close icon                    | Style    | -
  containerStyle       | Style of the main container component       | Style    | -
  listStyle            | Style of the dropdown list container        | Style    | -
  listRowStyle         | Style of each row within the list           | Style    | -

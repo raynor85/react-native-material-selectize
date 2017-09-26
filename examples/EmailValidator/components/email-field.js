@@ -69,6 +69,8 @@ export default class EmailField extends Component {
     return (
       <ChildEmailField
         ref={c => this._childEmailField = c}
+        chipStyle={styles.chip}
+        chipIconStyle={styles.chipIcon}
         error={error}
         itemId="email"
         items={items}
@@ -98,11 +100,13 @@ export default class EmailField extends Component {
             </View>
           </TouchableOpacity>
         )}
-        renderChip={(id, onClose) => (
+        renderChip={(id, onClose, item, style, iconStyle) => (
           <Chip
             key={id}
+            iconStyle={iconStyle}
             onClose={() => this.onChipClose(onClose)}
             text={id}
+            style={style}
           />
         )}
       />
@@ -111,6 +115,13 @@ export default class EmailField extends Component {
 }
 
 const styles = StyleSheet.create({
+  chip: {
+    paddingRight: 2
+  },
+  chipIcon: {
+    height: 24,
+    width: 24
+  },
   list: {
     backgroundColor: '#fff'
   },
