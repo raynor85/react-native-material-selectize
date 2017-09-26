@@ -108,9 +108,10 @@ styles                | reference to 'listRowStyle' prop
 ### renderChip default
 
 ```jsx
-(id, onClose, item, style) => (
+(id, onClose, item, style, iconStyle) => (
   <Chip
     key={id}
+    iconStyle={iconStyle}
     onClose={onClose}
     text={id}
     style={style}
@@ -124,6 +125,7 @@ id                    | unique key for the Chip, used as 'key'
 onClose               | onClose handler for removing the Chip
 item                  | row-indexed object contained in 'items' if the Chip has been created clicking on a row of the list, OR the value of the TextInput otherwise
 styles                | reference to 'chipStyle' prop
+iconStyle             | reference to 'chipIconStyle' prop
 
 ### textInputProps
 
