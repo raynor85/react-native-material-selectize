@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
@@ -15,11 +15,11 @@ const SHOWITEMS = {
 
 export default class ReactNativeSelectize extends React.Component {
   static propTypes = {
-    chipStyle: View.propTypes.style,
-    chipIconStyle: View.propTypes.style,
-    containerStyle: View.propTypes.style,
-    listStyle: View.propTypes.style,
-    listRowStyle: View.propTypes.style,
+    chipStyle: ViewPropTypes.style,
+    chipIconStyle: ViewPropTypes.style,
+    containerStyle: ViewPropTypes.style,
+    listStyle: ViewPropTypes.style,
+    listRowStyle: ViewPropTypes.style,
     itemId: PropTypes.string,
     items: PropTypes.array,
     label: PropTypes.string,
