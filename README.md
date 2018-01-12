@@ -43,14 +43,15 @@ yarn add react-native-material-selectize
  listStyle            | Style of the dropdown list container        | Style    | -
  listRowStyle         | Style of each row within the list           | Style    | -
  itemId               | Unique identifier for each item object      | String   | id
- items                | Array of objects to populate the list [More info](#items)      | Array    | []
- selectedItems        | Array of objects to render chips [More info](#items)      | Array    | []
+ items                | Array of objects to populate the list [More info](#items) | Array    | []
+ selectedItems        | Array of objects to render chips [More info](#selectedItems) | Array    | []
  label                | Text field label text                       | String   | -
  error                | Text field error text                       | String   | -
  errorColor           | Text field color for errored state          | String   | rgb(213, 0, 0)
  tintColor            | Text field accent color (focus)             | String   | rgb(0, 145, 234)
  baseColor            | Text field base color (blur)                | String   | rgba(0, 0, 0, .38)
  showItems            | Define when dropdown items should be seen   | 'always', 'never', 'onFocus', 'onTyping' | 'onFocus'
+ autoReflow           | Define whether the typed text reflows [More info](#3) | Boolean  | true
  trimOnSubmit         | Trim text before creating the Chip          | Boolean  | true
  renderRow            | Return the rendered row of the list         | Function | [renderRow default](#renderrow-default)
  renderChip           | Return the rendered Chip component          | Function | [renderChip default](#renderchip-default)

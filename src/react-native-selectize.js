@@ -15,6 +15,7 @@ const SHOWITEMS = {
 
 export default class ReactNativeSelectize extends React.Component {
   static propTypes = {
+    autoReflow: PropTypes.bool,
     chipStyle: ViewPropTypes.style,
     chipIconStyle: ViewPropTypes.style,
     containerStyle: ViewPropTypes.style,
@@ -36,6 +37,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   static defaultProps = {
+    autoReflow: true,
     itemId: 'id',
     items: [],
     errorColor: 'rgb(213, 0, 0)',
@@ -283,8 +285,8 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   render() {
-    const { chipStyle, chipIconStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor, label,
-            error } = this.props;
+    const { autoReflow, chipStyle, chipIconStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor,
+            label, error } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
@@ -319,11 +321,11 @@ export default class ReactNativeSelectize extends React.Component {
             style={textInputStyle}
           />
         </View>
-        <Text
+        {autoReflow && <Text
           style={hiddenTextStyle}
           onLayout={this._onLayout}>
           {text}
-        </Text>
+        </Text>}
         {!!error && <Text style={[styles.helper, { color: errorColor }]}>{error}</Text>}
         {this._renderItems()}
       </View>
