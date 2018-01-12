@@ -44,7 +44,7 @@ yarn add react-native-material-selectize
  listRowStyle         | Style of each row within the list           | Style    | -
  itemId               | Unique identifier for each item object      | String   | id
  items                | Array of objects to populate the list [More info](#items) | Array    | []
- selectedItems        | Array of objects to render chips [More info](#selectedItems) | Array    | []
+ selectedItems        | Array of objects to render chips [More info](#selecteditems) | Array    | []
  label                | Text field label text                       | String   | -
  error                | Text field error text                       | String   | -
  errorColor           | Text field color for errored state          | String   | rgb(213, 0, 0)
