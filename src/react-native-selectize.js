@@ -27,6 +27,7 @@ export default class ReactNativeSelectize extends React.Component {
     errorColor: PropTypes.string,
     tintColor: PropTypes.string,
     baseColor: PropTypes.string,
+    selectedItems: PropTypes.array,
     showItems: PropTypes.oneOf([SHOWITEMS.ONFOCUS, SHOWITEMS.ONTYPING, SHOWITEMS.ALWAYS, SHOWITEMS.NEVER]),
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
@@ -40,6 +41,7 @@ export default class ReactNativeSelectize extends React.Component {
     errorColor: 'rgb(213, 0, 0)',
     tintColor: 'rgb(0, 145, 234)',
     baseColor: 'rgba(0, 0, 0, .38)',
+    selectedItems: [],
     showItems: SHOWITEMS.ONFOCUS,
     trimOnSubmit: true,
     renderRow: (id, onPress, item, style) => (
@@ -66,9 +68,9 @@ export default class ReactNativeSelectize extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasFocus: this.props.textInputProps.autoFocus,
+      hasFocus: props.textInputProps.autoFocus,
       items: this._getNormalizedItems(props),
-      selectedItems: { result: [], entities: { item: {} } },
+      selectedItems: this._getNormalizedSelectedItems(props),
       text: '',
       textWidth: 0
     };
@@ -111,7 +113,7 @@ export default class ReactNativeSelectize extends React.Component {
 
   getValue = () => this.state.text;
 
-  _getNormalizedItems = ({ itemId, items }) => {
+  _getNormalized = ({ itemId }, items) => {
     let itemsCopy = [...items];
     if (itemsCopy.every(item => typeof item === 'string')) {
       itemsCopy = itemsCopy.reduce((acc, value) => {
@@ -131,6 +133,10 @@ export default class ReactNativeSelectize extends React.Component {
     }
     return normalizedItems;
   }
+
+  _getNormalizedItems = ({ itemId, items }) => this._getNormalized({ itemId }, items);
+
+  _getNormalizedSelectedItems = ({ itemId, selectedItems }) => this._getNormalized({ itemId }, selectedItems);
 
   _call() {
     const [callback, ...params] = arguments;

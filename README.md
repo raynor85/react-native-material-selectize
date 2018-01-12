@@ -44,6 +44,7 @@ yarn add react-native-material-selectize
  listRowStyle         | Style of each row within the list           | Style    | -
  itemId               | Unique identifier for each item object      | String   | id
  items                | Array of objects to populate the list [More info](#items)      | Array    | []
+ selectedItems        | Array of objects to render chips [More info](#items)      | Array    | []
  label                | Text field label text                       | String   | -
  error                | Text field error text                       | String   | -
  errorColor           | Text field color for errored state          | String   | rgb(213, 0, 0)
@@ -83,6 +84,10 @@ If you just need to render a single value for each row in the list and for each 
 ```
 ['john', 'doe']
 ```
+
+### selectedItems
+
+Same format rules of [items](#items)
 
 ### renderRow default
 
