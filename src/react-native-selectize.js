@@ -113,6 +113,8 @@ export default class ReactNativeSelectize extends React.Component {
 
   getSelectedItems = () => this.state.selectedItems;
 
+  clearSelectedItems = () => this.setState({ selectedItems: { result: [], entities: { item: {} } } });
+
   getValue = () => this.state.text;
 
   _getNormalized = ({ itemId }, items) => {

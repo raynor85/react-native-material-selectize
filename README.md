@@ -171,13 +171,14 @@ onSubmitEditing     | Function
 
 ## Methods
 
- name               | description                              | returns
-:------------------ |:---------------------------------------- |:-------
- focus()            | Acquire focus                            | -
- blur()             | Release focus                            | -
- submit()           | Transform current text into Chip         | -
- getValue()         | Get current value of the inner TextInput | String
- getSelectedItems() | Get items transformed into Chips         | Array
+ name                 | description                              | returns
+:-------------------- |:---------------------------------------- |:-------
+ focus()              | Acquire focus                            | -
+ blur()               | Release focus                            | -
+ submit()             | Transform current text into Chip         | -
+ getValue()           | Get current value of the inner TextInput | String
+ getSelectedItems()   | Get items transformed into Chips         | Array
+ clearSelectedItems() | Remove all the Chips                     | -
 
 ## Licence
 
