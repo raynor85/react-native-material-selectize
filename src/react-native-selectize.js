@@ -5,7 +5,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, ViewPropTypes } fr
 import PropTypes from 'prop-types';
 import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
-
+import Label from './label'
 const SHOWITEMS = {
   ONFOCUS: 'onFocus',
   ONTYPING: 'onTyping',
@@ -33,7 +33,15 @@ export default class ReactNativeSelectize extends React.Component {
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
     renderChip: PropTypes.func,
-    textInputProps: PropTypes.object
+    textInputProps: PropTypes.object,
+    fontSize: PropTypes.number,
+    titleFontSize: PropTypes.number,
+    labelFontSize: PropTypes.number,
+    labelHeight: PropTypes.number,
+    labelPadding: PropTypes.number,
+    animationDuration: PropTypes.number,
+    labelTextStyle: Text.propTypes.style,
+    onChangeSelectedItems: PropTypes.func
   };
 
   static defaultProps = {
@@ -64,7 +72,16 @@ export default class ReactNativeSelectize extends React.Component {
         style={style}
       />
     ),
-    textInputProps: {}
+    onChangeSelectedItems: selectedItems => {},
+    textInputProps: {},
+
+    fontSize: 16,
+    titleFontSize: 12,
+    labelFontSize: 12,
+    labelHeight: 20,
+    labelPadding: 7,
+    
+    animationDuration: 225,
   };
 
   constructor(props) {
@@ -175,7 +192,7 @@ export default class ReactNativeSelectize extends React.Component {
       selectedItems.result.push(text);
       selectedItems.entities.item[text] = item;
     }
-    this.setState({ text: '' });
+    this.setState({ text: '' }, () => this.props.onChangeSelectedItems(this.state.selectedItems.result));
   };
 
   _onFocus = callback => {
@@ -201,7 +218,7 @@ export default class ReactNativeSelectize extends React.Component {
 
     selectedItems.result = selectedItems.result.filter(item => item !== text);
     delete selectedItems.entities.item[text];
-    this.setState({ selectedItems });
+    this.setState({ selectedItems }, () => this.props.onChangeSelectedItems(this.state.selectedItems.result));
   };
 
   _onLayout = e => {
@@ -287,8 +304,25 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   render() {
-    const { autoReflow, chipStyle, chipIconStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor,
-            label, error } = this.props;
+    const { 
+      autoReflow,
+      chipStyle, 
+      chipIconStyle, 
+      containerStyle, 
+      textInputProps, 
+      errorColor, 
+      renderChip, 
+      tintColor,
+      baseColor,
+      label, 
+      error,
+      labelHeight,
+      labelPadding,
+      labelFontSize,
+      animationDuration,
+      fontSize,
+      labelTextStyle
+     } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
@@ -301,9 +335,23 @@ export default class ReactNativeSelectize extends React.Component {
     };
     const hiddenTextStyle = { ...textInputStyle, minWidth: 0, position: 'absolute', zIndex: -1, height: 0 };
 
+    let labelProps = {
+      baseSize: labelHeight,
+      basePadding: labelPadding,
+      fontSize,
+      activeFontSize: labelFontSize,
+      tintColor,
+      baseColor,
+      errorColor,
+      animationDuration,
+      active: !!(this.getValue() || this.getSelectedItems().result.length),
+      focused: !!this.state.hasFocus,
+      errored: !!error,
+      style: labelStyle,
+    }
     return (
       <View style={[styles.container, containerStyle]}>
-        {!!label && <Text style={labelStyle}>{label}</Text>}
+        {!!label &&  <Label {...labelProps}>{label}</Label>}
         <View style={inputContainerStyle}>
           {selectedItems.result.map(id =>
             renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle, chipIconStyle)
@@ -373,6 +421,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     height: 32,
-    padding: 0
-  }
+    padding: 0,
+    top: 2,
+    padding: 0,
+    margin: 0,
+  },
 });
