@@ -102,8 +102,8 @@ export default class ReactNativeSelectize extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const items = this._getNormalizedItems(nextProps);
-
-    this.setState({ items });
+    const selectedItems = this._getNormalizedSelectedItems(nextProps);
+    this.setState({ items, selectedItems });
   }
 
   componentWillUnmount() {
@@ -135,6 +135,7 @@ export default class ReactNativeSelectize extends React.Component {
   getValue = () => this.state.text;
 
   _getNormalized = ({ itemId }, items) => {
+    
     let itemsCopy = [...items];
     if (itemsCopy.every(item => typeof item === 'string')) {
       itemsCopy = itemsCopy.reduce((acc, value) => {
@@ -349,6 +350,7 @@ export default class ReactNativeSelectize extends React.Component {
       errored: !!error,
       style: labelStyle,
     }
+   
     return (
       <View style={[styles.container, containerStyle]}>
         {!!label &&  <Label {...labelProps}>{label}</Label>}
