@@ -180,6 +180,12 @@ onSubmitEditing     | Function
  getSelectedItems()   | Get items transformed into Chips         | Array
  clearSelectedItems() | Remove all the Chips                     | -
 
+## Caveats
+
+- When `Selectize` is a child of a `ScrollView`, the `ScrollView`'s
+  `keyboardShouldPersistTaps` prop must be set to either `handled` or `always`
+  for dropdown completion to work properly.
+
 ## Licence
 
 react-native-material-selectize is [MIT licensed](LICENSE.md).
