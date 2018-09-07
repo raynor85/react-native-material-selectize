@@ -56,6 +56,7 @@ yarn add react-native-material-selectize
  renderRow            | Return the rendered row of the list         | Function | [renderRow default](#renderrow-default)
  renderChip           | Return the rendered Chip component          | Function | [renderChip default](#renderchip-default)
  textInputProps       | [TextInput][rn-textinput] props [More info](#textinputprops) | Object   | -
+ middleComponent      | A custom component to render between the text input and the item list | Component | -
 
 ### items
 
