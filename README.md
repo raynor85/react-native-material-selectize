@@ -56,6 +56,7 @@ yarn add react-native-material-selectize
  renderRow            | Return the rendered row of the list         | Function | [renderRow default](#renderrow-default)
  renderChip           | Return the rendered Chip component          | Function | [renderChip default](#renderchip-default)
  textInputProps       | [TextInput][rn-textinput] props [More info](#textinputprops) | Object   | -
+ filterOnKey          | The key to filter on. If not set, the provided itemId is used | String   | -
 
 ### items
 

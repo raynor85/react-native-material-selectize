@@ -33,7 +33,8 @@ export default class ReactNativeSelectize extends React.Component {
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
     renderChip: PropTypes.func,
-    textInputProps: PropTypes.object
+    textInputProps: PropTypes.object,
+    filterOnKey: PropTypes.string
   };
 
   static defaultProps = {
@@ -64,7 +65,8 @@ export default class ReactNativeSelectize extends React.Component {
         style={style}
       />
     ),
-    textInputProps: {}
+    textInputProps: {},
+    filterOnKey: null
   };
 
   constructor(props) {
@@ -224,11 +226,13 @@ export default class ReactNativeSelectize extends React.Component {
   _filterItems = searchTerm => {
     const { items, selectedItems } = this.state;
     const filteredItems = { result: [], entities: { item: {} } };
+    const { filterOnKey } = this.props;
 
     items.result.forEach(id => {
       const parts = searchTerm.trim().split(/[ \-:]+/);
       const regex = new RegExp(`(${parts.join('|')})`, 'ig');
-      if (!selectedItems.entities.item[id] && regex.test(id)) {
+      const filterOnValue = filterOnKey ? items.entities.item[id][filterOnKey] : id;
+      if (!selectedItems.entities.item[id] && regex.test(filterOnValue)) {
         filteredItems.result.push(id);
         filteredItems.entities.item[id] = { ...items.entities.item[id] };
       }
