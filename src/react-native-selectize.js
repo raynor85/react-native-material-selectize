@@ -33,7 +33,8 @@ export default class ReactNativeSelectize extends React.Component {
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
     renderChip: PropTypes.func,
-    textInputProps: PropTypes.object
+    textInputProps: PropTypes.object,
+    middleComponent: PropTypes.element
   };
 
   static defaultProps = {
@@ -64,7 +65,8 @@ export default class ReactNativeSelectize extends React.Component {
         style={style}
       />
     ),
-    textInputProps: {}
+    textInputProps: {},
+    middleComponent: null
   };
 
   constructor(props) {
@@ -288,7 +290,7 @@ export default class ReactNativeSelectize extends React.Component {
 
   render() {
     const { autoReflow, chipStyle, chipIconStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor,
-            label, error } = this.props;
+            label, error, middleComponent } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
@@ -329,6 +331,7 @@ export default class ReactNativeSelectize extends React.Component {
           {text}
         </Text>}
         {!!error && <Text style={[styles.helper, { color: errorColor }]}>{error}</Text>}
+        {middleComponent}
         {this._renderItems()}
       </View>
     );
