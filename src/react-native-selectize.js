@@ -231,7 +231,7 @@ export default class ReactNativeSelectize extends React.Component {
     const { filterOnKey } = this.props;
 
     items.result.forEach(id => {
-      const parts = searchTerm.trim().split(/[ \-:]+/);
+      const parts = searchTerm.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').trim().split(/[ \-:]+/);
       const regex = new RegExp(`(${parts.join('|')})`, 'ig');
       const filterOnValue = filterOnKey ? items.entities.item[id][filterOnKey] : id;
       if (!selectedItems.entities.item[id] && regex.test(filterOnValue)) {
