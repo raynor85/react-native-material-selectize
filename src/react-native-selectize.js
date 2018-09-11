@@ -35,7 +35,8 @@ export default class ReactNativeSelectize extends React.Component {
     renderChip: PropTypes.func,
     textInputProps: PropTypes.object,
     middleComponent: PropTypes.element,
-    filterOnKey: PropTypes.string
+    filterOnKey: PropTypes.string,
+    onChangeSelectedItems: PropTypes.func,
   };
 
   static defaultProps = {
@@ -68,7 +69,8 @@ export default class ReactNativeSelectize extends React.Component {
     ),
     textInputProps: {},
     middleComponent: null,
-    filterOnKey: null
+    filterOnKey: null,
+    onChangeSelectedItems: (selectedItems) => {},
   };
 
   constructor(props) {
@@ -117,7 +119,21 @@ export default class ReactNativeSelectize extends React.Component {
 
   getSelectedItems = () => this.state.selectedItems;
 
-  clearSelectedItems = () => this.setState({ selectedItems: { result: [], entities: { item: {} } } });
+  clearSelectedItems = () => {
+    const selectedItems = {
+      result: [],
+      entities: {
+        item: {}
+      }
+    }
+    this._setSelectedItems(selectedItems);
+  };
+
+  _setSelectedItems = (selectedItems) => {
+    this.setState({ selectedItems }, () => {
+      this.props.onChangeSelectedItems(selectedItems);
+    });
+  }
 
   getValue = () => this.state.text;
 
@@ -163,7 +179,11 @@ export default class ReactNativeSelectize extends React.Component {
 
   _onSubmitEditing = callback => {
     const { itemId, trimOnSubmit } = this.props;
-    const { items, selectedItems } = this.state;
+    const { items } = this.state;
+    const selectedItems = {
+      result: [...this.state.selectedItems.result],
+      entities: {...this.state.selectedItems.entities}
+    }
     const text = trimOnSubmit ? this.state.text.trim() : this.state.text;
 
     if (this._call(callback, text) === false) {
@@ -178,6 +198,7 @@ export default class ReactNativeSelectize extends React.Component {
 
       selectedItems.result.push(text);
       selectedItems.entities.item[text] = item;
+      this._setSelectedItems(selectedItems);
     }
     this.setState({ text: '' });
   };
@@ -201,11 +222,14 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _onChipClose = text => {
-    const { selectedItems } = this.state;
+    const selectedItems = {
+      result: [...this.state.selectedItems.result],
+      entities: {...this.state.selectedItems.entities}
+    }
 
     selectedItems.result = selectedItems.result.filter(item => item !== text);
     delete selectedItems.entities.item[text];
-    this.setState({ selectedItems });
+    this._setSelectedItems(selectedItems);
   };
 
   _onLayout = e => {
