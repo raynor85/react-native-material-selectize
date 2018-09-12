@@ -36,7 +36,7 @@ export default class ReactNativeSelectize extends React.Component {
     textInputProps: PropTypes.object,
     middleComponent: PropTypes.element,
     filterOnKey: PropTypes.string,
-    onChangeSelectedItems: PropTypes.func,
+    onChangeSelectedItems: PropTypes.func
   };
 
   static defaultProps = {
@@ -70,7 +70,7 @@ export default class ReactNativeSelectize extends React.Component {
     textInputProps: {},
     middleComponent: null,
     filterOnKey: null,
-    onChangeSelectedItems: (selectedItems) => {},
+    onChangeSelectedItems: () => {}
   };
 
   constructor(props) {
@@ -125,11 +125,18 @@ export default class ReactNativeSelectize extends React.Component {
       entities: {
         item: {}
       }
-    }
+    };
     this._setSelectedItems(selectedItems);
   };
 
-  _setSelectedItems = (selectedItems) => {
+  _copySelectedItems = () => {
+    return {
+      result: [...this.state.selectedItems.result],
+      entities: { ...this.state.selectedItems.entities }
+    };
+  }
+
+  _setSelectedItems = selectedItems => {
     this.setState({ selectedItems }, () => {
       this.props.onChangeSelectedItems(selectedItems);
     });
@@ -180,10 +187,7 @@ export default class ReactNativeSelectize extends React.Component {
   _onSubmitEditing = callback => {
     const { itemId, trimOnSubmit } = this.props;
     const { items } = this.state;
-    const selectedItems = {
-      result: [...this.state.selectedItems.result],
-      entities: {...this.state.selectedItems.entities}
-    }
+    const selectedItems = this._copySelectedItems();
     const text = trimOnSubmit ? this.state.text.trim() : this.state.text;
 
     if (this._call(callback, text) === false) {
@@ -222,10 +226,7 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   _onChipClose = text => {
-    const selectedItems = {
-      result: [...this.state.selectedItems.result],
-      entities: {...this.state.selectedItems.entities}
-    }
+    const selectedItems = this._copySelectedItems();
 
     selectedItems.result = selectedItems.result.filter(item => item !== text);
     delete selectedItems.entities.item[text];
