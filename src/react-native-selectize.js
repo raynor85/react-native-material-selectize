@@ -19,6 +19,7 @@ export default class ReactNativeSelectize extends React.Component {
     chipStyle: ViewPropTypes.style,
     chipIconStyle: ViewPropTypes.style,
     containerStyle: ViewPropTypes.style,
+    inputContainerStyle: ViewPropTypes.style,
     listStyle: ViewPropTypes.style,
     listRowStyle: ViewPropTypes.style,
     itemId: PropTypes.string,
@@ -318,14 +319,12 @@ export default class ReactNativeSelectize extends React.Component {
   };
 
   render() {
-    const { autoReflow, chipStyle, chipIconStyle, containerStyle, textInputProps, errorColor, renderChip, tintColor,
-            label, error, middleComponent } = this.props;
+    const { autoReflow, chipStyle, chipIconStyle, containerStyle, inputContainerStyle, textInputProps, errorColor,
+            renderChip, tintColor, label, error, middleComponent } = this.props;
     const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
             ...otherTextInputProps } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
-    const inputContainerStyle = [
-      styles.inputContainer, { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() }
-    ];
+    const inputContainerBorderStyle = { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() };
     const labelStyle = [styles.label, { color: this._getColor() }];
     const textInputStyle = {
       ...StyleSheet.flatten(styles.textInput), ...textInputStyleFromProps, minWidth: textWidth > 40 ? textWidth : 40
@@ -335,7 +334,7 @@ export default class ReactNativeSelectize extends React.Component {
     return (
       <View style={[styles.container, containerStyle]}>
         {!!label && <Text style={labelStyle}>{label}</Text>}
-        <View style={inputContainerStyle}>
+        <View style={[styles.inputContainer, inputContainerBorderStyle, inputContainerStyle]}>
           {selectedItems.result.map(id =>
             renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle, chipIconStyle)
           )}
