@@ -40,6 +40,7 @@ yarn add react-native-material-selectize
  chipStyle            | Style of Chip component                     | Style    | -
  chipIconStyle        | Style of Chip close icon                    | Style    | -
  containerStyle       | Style of the main container component       | Style    | -
+ inputContainerStyle  | Style of the input container component      | Style    | -
  listStyle            | Style of the dropdown list container        | Style    | -
  listRowStyle         | Style of each row within the list           | Style    | -
  itemId               | Unique identifier for each item object      | String   | id
@@ -107,7 +108,7 @@ Same format rules of [items](#items)
 )
 ```
 
-param                 | description                                 
+param                 | description
 :-------------------- |:-------------------------------------------
 id                    | 'itemId' of the row-indexed object contained in 'items', used as 'key'
 onPress               | onPress handler that turns the selected row into a Chip
@@ -128,7 +129,7 @@ styles                | reference to 'listRowStyle' prop
 )
 ```
 
-param                 | description                                 
+param                 | description
 :-------------------- |:-------------------------------------------
 id                    | unique key for the Chip, used as 'key'
 onClose               | onClose handler for removing the Chip
@@ -167,10 +168,10 @@ onBlur                     | Function  | (text) => {}
 
 The following handler props have a special behavior: **returning false they prevent the related event dispatch**.
 
-prevent event prop  | type      
+prevent event prop  | type
 :------------------ |:---------
-onChangeText        | Function  
-onSubmitEditing     | Function  
+onChangeText        | Function
+onSubmitEditing     | Function
 
 ## Methods
 
