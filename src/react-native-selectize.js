@@ -273,8 +273,10 @@ export default class ReactNativeSelectize extends React.Component {
     const { hasFocus, text } = this.state;
     const items = this._filterItems(text.trim());
     const itemComponent = (
-      <View style={[styles.list, listStyle]}>
-        {items.result.map(id => this._getRow(id))}
+      <View>
+        <View style={[styles.list, listStyle]}>
+          {items.result.map(id => this._getRow(id))}
+        </View>
       </View>
     );
 

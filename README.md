@@ -190,6 +190,20 @@ onSubmitEditing     | Function
   `keyboardShouldPersistTaps` prop must be set to either `handled` or `always`
   for dropdown completion to work properly.
 
+## FAQ
+
+### How to make list go over all other elements vs pushing them down?
+By default the list of rendered items pushes the other elements down. If you want to have an absolute positioned list, it can be achieved in the following way:
+- specify a `zIndex` for the container bigger than its siblings, usually 1 is just ok:
+```js
+containerStyle: { zIndex: 1 }
+```
+- specify an absolute positioning for `listStyle`:
+```js
+listStyle: { position: 'absolute' }
+```
+Related issue: https://github.com/raynor85/react-native-material-selectize/issues/19
+
 ## Licence
 
 react-native-material-selectize is [MIT licensed](LICENSE.md).
