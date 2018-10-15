@@ -67,54 +67,61 @@ export default class EmailField extends Component {
     const { error } = this.state;
 
     return (
-      <ChildEmailField
-        ref={c => this._childEmailField = c}
-        chipStyle={styles.chip}
-        chipIconStyle={styles.chipIcon}
-        error={error}
-        itemId="email"
-        items={items}
-        label="Email addresses"
-        listStyle={styles.list}
-        tintColor="#028fb0"
-        textInputProps={{
-          onSubmitEditing: this.onSubmitEditing,
-          onBlur: () => this._childEmailField.submit(),
-          placeholder: 'Insert one or more emails',
-          keyboardType: 'email-address'
-        }}
-        renderRow={(id, onPress, item) => (
-          <TouchableOpacity
-              activeOpacity={0.6}
+      <View>
+        <ChildEmailField
+          ref={c => this._childEmailField = c}
+          containerStyle={styles.container}
+          chipStyle={styles.chip}
+          chipIconStyle={styles.chipIcon}
+          error={error}
+          itemId="email"
+          items={items}
+          label="Email addresses"
+          listStyle={styles.list}
+          tintColor="#028fb0"
+          textInputProps={{
+            onSubmitEditing: this.onSubmitEditing,
+            onBlur: () => this._childEmailField.submit(),
+            placeholder: 'Insert one or more emails',
+            keyboardType: 'email-address'
+          }}
+          renderRow={(id, onPress, item) => (
+            <TouchableOpacity
+                activeOpacity={0.6}
+                key={id}
+                onPress={onPress}
+                style={styles.listRow}>
+              <View style={styles.listWrapper}>
+                <View style={styles.listIcon}>
+                  <Text style={styles.listInitials}>{item.initials}</Text>
+                </View>
+                <View>
+                  <Text style={styles.listNameText}>{item.name}</Text>
+                  <Text style={styles.listEmailText}>{id}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          renderChip={(id, onClose, item, style, iconStyle) => (
+            <Chip
               key={id}
-              onPress={onPress}
-              style={styles.listRow}>
-            <View style={styles.listWrapper}>
-              <View style={styles.listIcon}>
-                <Text style={styles.listInitials}>{item.initials}</Text>
-              </View>
-              <View>
-                <Text style={styles.listNameText}>{item.name}</Text>
-                <Text style={styles.listEmailText}>{id}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-        renderChip={(id, onClose, item, style, iconStyle) => (
-          <Chip
-            key={id}
-            iconStyle={iconStyle}
-            onClose={() => this.onChipClose(onClose)}
-            text={id}
-            style={style}
-          />
-        )}
-      />
+              iconStyle={iconStyle}
+              onClose={() => this.onChipClose(onClose)}
+              text={id}
+              style={style}
+            />
+          )}
+        />
+        <Text>Content which is covered</Text>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    zIndex: 1
+  },
   chip: {
     paddingRight: 2
   },
@@ -123,7 +130,8 @@ const styles = StyleSheet.create({
     width: 24
   },
   list: {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    position: 'absolute'
   },
   listRow: {
     paddingVertical: 8,
