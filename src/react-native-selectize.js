@@ -92,9 +92,8 @@ export default class ReactNativeSelectize extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const items = this._getNormalizedItems(nextProps);
-    const selectedItems = this._getNormalizedSelectedItems(nextProps);
 
-    this.setState({ items, selectedItems });
+    this.setState({ items });
   }
 
   componentWillUnmount() {
