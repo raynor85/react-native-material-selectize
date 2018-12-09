@@ -206,6 +206,12 @@ export default class ReactNativeSelectize extends React.Component {
       this._setSelectedItems(selectedItems);
     }
     this.setState({ text: '' });
+
+    // Hack for Android devices to reset keyboard state. Otherwise TextInput does not properly clear 
+    // previously inputted text.
+    // See: https://stackoverflow.com/questions/37798584/react-native-when-submitting-a-text-input-in-android-the-word-suggestions-are
+    this._textInput.setNativeProps({keyboardType:"email-address"});
+    this._textInput.setNativeProps({keyboardType:"default"});
   };
 
   _onFocus = callback => {
