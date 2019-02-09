@@ -1,7 +1,13 @@
 'use strict';
 
 import React from 'react';
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 export default class ReactNativeChip extends React.PureComponent {
   static defaultProps = {
@@ -20,11 +26,21 @@ export default class ReactNativeChip extends React.PureComponent {
     return (
       <View style={[styles.root, style]}>
         <View style={styles.container}>
-          <Text style={styles.text} numberOfLines={1}>{text}</Text>
+          <Text style={styles.text} numberOfLines={1}>
+            {text}
+          </Text>
           <TouchableOpacity
             style={[styles.iconWrapper, iconStyle]}
-            onPress={onClose}>
-            <Text style={[styles.icon, this.isIOS ? styles.iconIOS : styles.iconAndroid]}>✕</Text>
+            onPress={onClose}
+          >
+            <Text
+              style={[
+                styles.icon,
+                this.isIOS ? styles.iconIOS : styles.iconAndroid
+              ]}
+            >
+              ✕
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

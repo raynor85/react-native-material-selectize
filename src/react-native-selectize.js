@@ -1,7 +1,14 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ViewPropTypes } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ViewPropTypes
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { normalize, schema } from 'normalizr';
 import Chip from './react-native-chip';
@@ -30,7 +37,12 @@ export default class ReactNativeSelectize extends React.Component {
     tintColor: PropTypes.string,
     baseColor: PropTypes.string,
     selectedItems: PropTypes.array,
-    showItems: PropTypes.oneOf([SHOWITEMS.ONFOCUS, SHOWITEMS.ONTYPING, SHOWITEMS.ALWAYS, SHOWITEMS.NEVER]),
+    showItems: PropTypes.oneOf([
+      SHOWITEMS.ONFOCUS,
+      SHOWITEMS.ONTYPING,
+      SHOWITEMS.ALWAYS,
+      SHOWITEMS.NEVER
+    ]),
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
     renderChip: PropTypes.func,
@@ -55,7 +67,8 @@ export default class ReactNativeSelectize extends React.Component {
         activeOpacity={0.6}
         key={id}
         onPress={onPress}
-        style={[styles.listRow, style]}>
+        style={[styles.listRow, style]}
+      >
         <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
       </TouchableOpacity>
     ),
@@ -102,7 +115,7 @@ export default class ReactNativeSelectize extends React.Component {
 
   focus = () => {
     this._textInput.focus();
-  }
+  };
 
   blur = () => {
     const { onBlur } = this.props.textInputProps;
@@ -112,11 +125,11 @@ export default class ReactNativeSelectize extends React.Component {
     clearInterval(this.cancelBlur);
     this._call(onBlur, text);
     this.setState({ hasFocus: false });
-  }
+  };
 
   submit = () => {
     this._onSubmitEditing(this.props.textInputProps.onSubmitEditing);
-  }
+  };
 
   getSelectedItems = () => this.state.selectedItems;
 
@@ -135,13 +148,13 @@ export default class ReactNativeSelectize extends React.Component {
       result: [...this.state.selectedItems.result],
       entities: { ...this.state.selectedItems.entities }
     };
-  }
+  };
 
   _setSelectedItems = selectedItems => {
     this.setState({ selectedItems }, () => {
       this.props.onChangeSelectedItems(selectedItems);
     });
-  }
+  };
 
   getValue = () => this.state.text;
 
@@ -158,17 +171,21 @@ export default class ReactNativeSelectize extends React.Component {
         return item;
       });
     }
-    const itemSchema = new schema.Entity('item', undefined, { idAttribute: itemId });
+    const itemSchema = new schema.Entity('item', undefined, {
+      idAttribute: itemId
+    });
     let normalizedItems = normalize(itemsCopy, [itemSchema]);
     if (!normalizedItems.entities.item) {
       normalizedItems.entities.item = {};
     }
     return normalizedItems;
-  }
+  };
 
-  _getNormalizedItems = ({ itemId, items }) => this._getNormalized({ itemId }, items);
+  _getNormalizedItems = ({ itemId, items }) =>
+    this._getNormalized({ itemId }, items);
 
-  _getNormalizedSelectedItems = ({ itemId, selectedItems }) => this._getNormalized({ itemId }, selectedItems);
+  _getNormalizedSelectedItems = ({ itemId, selectedItems }) =>
+    this._getNormalized({ itemId }, selectedItems);
 
   _call() {
     const [callback, ...params] = arguments;
@@ -199,7 +216,9 @@ export default class ReactNativeSelectize extends React.Component {
     }
 
     if (!selectedItems.entities.item.hasOwnProperty(text)) {
-      const item = items.entities.item.hasOwnProperty(text) ? { ...items.entities.item[text] } : { [itemId]: text };
+      const item = items.entities.item.hasOwnProperty(text)
+        ? { ...items.entities.item[text] }
+        : { [itemId]: text };
 
       selectedItems.result.push(text);
       selectedItems.entities.item[text] = item;
@@ -207,11 +226,11 @@ export default class ReactNativeSelectize extends React.Component {
     }
     this.setState({ text: '' });
 
-    // Hack for Android devices to reset keyboard state. Otherwise TextInput does not properly clear 
+    // Hack for Android devices to reset keyboard state. Otherwise TextInput does not properly clear
     // previously inputted text.
     // See: https://stackoverflow.com/questions/37798584/react-native-when-submitting-a-text-input-in-android-the-word-suggestions-are
-    this._textInput.setNativeProps({keyboardType:"email-address"});
-    this._textInput.setNativeProps({keyboardType:"default"});
+    this._textInput.setNativeProps({ keyboardType: 'email-address' });
+    this._textInput.setNativeProps({ keyboardType: 'default' });
   };
 
   _onFocus = callback => {
@@ -254,7 +273,12 @@ export default class ReactNativeSelectize extends React.Component {
     const { listRowStyle, renderRow } = this.props;
     const { items } = this.state;
 
-    return renderRow(id, () => this._selectItem(id), items.entities.item[id], listRowStyle);
+    return renderRow(
+      id,
+      () => this._selectItem(id),
+      items.entities.item[id],
+      listRowStyle
+    );
   };
 
   _filterItems = searchTerm => {
@@ -263,9 +287,14 @@ export default class ReactNativeSelectize extends React.Component {
     const { filterOnKey } = this.props;
 
     items.result.forEach(id => {
-      const parts = searchTerm.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').trim().split(/[ \-:]+/);
+      const parts = searchTerm
+        .replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+        .trim()
+        .split(/[ \-:]+/);
       const regex = new RegExp(`(${parts.join('|')})`, 'ig');
-      const filterOnValue = filterOnKey ? items.entities.item[id][filterOnKey] : id;
+      const filterOnValue = filterOnKey
+        ? items.entities.item[id][filterOnKey]
+        : id;
       if (!selectedItems.entities.item[id] && regex.test(filterOnValue)) {
         filteredItems.result.push(id);
         filteredItems.entities.item[id] = { ...items.entities.item[id] };
@@ -321,34 +350,76 @@ export default class ReactNativeSelectize extends React.Component {
     const { error } = this.props;
     const { hasFocus } = this.state;
 
-    return error || hasFocus ?
-      { borderBottomWidth: 2, paddingBottom: 1 } :
-      { borderBottomWidth: 0.5, paddingBottom: 2.5 };
+    return error || hasFocus
+      ? { borderBottomWidth: 2, paddingBottom: 1 }
+      : { borderBottomWidth: 0.5, paddingBottom: 2.5 };
   };
 
   render() {
-    const { autoReflow, chipStyle, chipIconStyle, containerStyle, inputContainerStyle, textInputProps, errorColor,
-            renderChip, tintColor, label, error, middleComponent } = this.props;
-    const { style: textInputStyleFromProps, onChangeText, onSubmitEditing, onFocus, onBlur, placeholder,
-            ...otherTextInputProps } = textInputProps;
+    const {
+      autoReflow,
+      chipStyle,
+      chipIconStyle,
+      containerStyle,
+      inputContainerStyle,
+      textInputProps,
+      errorColor,
+      renderChip,
+      tintColor,
+      label,
+      error,
+      middleComponent
+    } = this.props;
+    const {
+      style: textInputStyleFromProps,
+      onChangeText,
+      onSubmitEditing,
+      onFocus,
+      onBlur,
+      placeholder,
+      ...otherTextInputProps
+    } = textInputProps;
     const { selectedItems, text, textWidth } = this.state;
-    const inputContainerBorderStyle = { borderBottomColor: this._getColor(), ...this._getLineStyleVariant() };
+    const inputContainerBorderStyle = {
+      borderBottomColor: this._getColor(),
+      ...this._getLineStyleVariant()
+    };
     const labelStyle = [styles.label, { color: this._getColor() }];
     const textInputStyle = {
-      ...StyleSheet.flatten(styles.textInput), ...textInputStyleFromProps, minWidth: textWidth > 40 ? textWidth : 40
+      ...StyleSheet.flatten(styles.textInput),
+      ...textInputStyleFromProps,
+      minWidth: textWidth > 40 ? textWidth : 40
     };
-    const hiddenTextStyle = { ...textInputStyle, minWidth: 0, position: 'absolute', zIndex: -1, height: 0 };
+    const hiddenTextStyle = {
+      ...textInputStyle,
+      minWidth: 0,
+      position: 'absolute',
+      zIndex: -1,
+      height: 0
+    };
 
     return (
       <View style={[styles.container, containerStyle]}>
         {!!label && <Text style={labelStyle}>{label}</Text>}
-        <View style={[styles.inputContainer, inputContainerBorderStyle, inputContainerStyle]}>
+        <View
+          style={[
+            styles.inputContainer,
+            inputContainerBorderStyle,
+            inputContainerStyle
+          ]}
+        >
           {selectedItems.result.map(id =>
-            renderChip(id, () => this._onChipClose(id), selectedItems.entities.item[id], chipStyle, chipIconStyle)
+            renderChip(
+              id,
+              () => this._onChipClose(id),
+              selectedItems.entities.item[id],
+              chipStyle,
+              chipIconStyle
+            )
           )}
           <TextInput
-            ref={c => this._textInput = c}
-            {... { ...this.defaultTextInputProps, ...otherTextInputProps }}
+            ref={c => (this._textInput = c)}
+            {...{ ...this.defaultTextInputProps, ...otherTextInputProps }}
             disableFullscreenUI={true}
             placeholder={selectedItems.result.length ? null : placeholder}
             underlineColorAndroid="transparent"
@@ -361,12 +432,14 @@ export default class ReactNativeSelectize extends React.Component {
             style={textInputStyle}
           />
         </View>
-        {autoReflow && <Text
-          style={hiddenTextStyle}
-          onLayout={this._onLayout}>
-          {text}
-        </Text>}
-        {!!error && <Text style={[styles.helper, { color: errorColor }]}>{error}</Text>}
+        {autoReflow && (
+          <Text style={hiddenTextStyle} onLayout={this._onLayout}>
+            {text}
+          </Text>
+        )}
+        {!!error && (
+          <Text style={[styles.helper, { color: errorColor }]}>{error}</Text>
+        )}
         {middleComponent}
         {this._renderItems()}
       </View>

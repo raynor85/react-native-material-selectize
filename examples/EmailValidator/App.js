@@ -49,7 +49,9 @@ export default class App extends React.Component {
     this._emailField.blur();
     setTimeout(() => {
       if (!this._emailField.isErrored()) {
-        const message = `Emails sent!\n\n${this._emailField.getSelectedEmails().join('\n')}`;
+        const message = `Emails sent!\n\n${this._emailField
+          .getSelectedEmails()
+          .join('\n')}`;
 
         clearInterval(this.cancelMessage);
         this.setState({ message });
@@ -68,10 +70,11 @@ export default class App extends React.Component {
       <ScrollView
         contentContainerStyle={styles.container}
         style={styles.root}
-        keyboardShouldPersistTaps="always">
+        keyboardShouldPersistTaps="always"
+      >
         <View>
           <EmailField
-            ref={c => this._emailField = c}
+            ref={c => (this._emailField = c)}
             itemId="email"
             items={items}
             onSubmitEditing={isEnabled => this.checkIsEnabled(isEnabled)}
@@ -86,9 +89,7 @@ export default class App extends React.Component {
             />
           </View>
         </View>
-        <Text style={styles.message}>
-          {message}
-        </Text>
+        <Text style={styles.message}>{message}</Text>
       </ScrollView>
     );
   }
