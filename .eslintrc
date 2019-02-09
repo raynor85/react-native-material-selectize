@@ -12,11 +12,7 @@
     },
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "react-native",
-    "jest"
-  ],
+  "plugins": ["react", "react-native", "jest"],
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
     "strict": 0,
@@ -27,9 +23,12 @@
     "react/sort-prop-types": 0,
     "no-alert": 2,
     "no-array-constructor": 2,
-    "no-bitwise": [1, {
-      "allow": ["~"]
-    }],
+    "no-bitwise": [
+      1,
+      {
+        "allow": ["~"]
+      }
+    ],
     "no-caller": 2,
     "no-catch-shadow": 2,
     "no-class-assign": 2,
@@ -45,7 +44,7 @@
     "no-dupe-keys": 2,
     "no-dupe-args": 2,
     "no-duplicate-case": 2,
-    "no-else-return": 0, // DISCUSS
+    "no-else-return": 0,
     "no-empty": 2,
     "no-empty-character-class": 2,
     "no-eq-null": 2,
@@ -54,18 +53,18 @@
     "no-extend-native": 2,
     "no-extra-bind": 2,
     "no-extra-boolean-cast": 2,
-    "no-extra-parens": [2, "all", {
-      "ignoreJSX": all
-    }],
     "no-extra-semi": 2,
     "no-fallthrough": 2,
     "no-floating-decimal": 2,
     "no-func-assign": 2,
-    "no-implicit-coercion": [2, {
-      "boolean": false,
-      "number": true,
-      "string": true
-    }],
+    "no-implicit-coercion": [
+      2,
+      {
+        "boolean": false,
+        "number": true,
+        "string": true
+      }
+    ],
     "no-implied-eval": 2,
     "no-inline-comments": 2,
     "no-inner-declarations": [2, "functions"],
@@ -82,9 +81,12 @@
     "linebreak-style": [2, "unix"],
     "no-multi-spaces": 2,
     "no-multi-str": 2,
-    "no-multiple-empty-lines": [2, {
-      "max": 1
-    }],
+    "no-multiple-empty-lines": [
+      2,
+      {
+        "max": 1
+      }
+    ],
     "no-native-reassign": 2,
     "no-negated-condition": 0,
     "no-negated-in-lhs": 2,
@@ -97,7 +99,7 @@
     "no-obj-calls": 2,
     "no-octal": 2,
     "no-octal-escape": 2,
-    "no-param-reassign": 0, // DISCUSS
+    "no-param-reassign": 0,
     "no-path-concat": 2,
     "no-plusplus": 0,
     "no-process-env": 2,
@@ -127,18 +129,24 @@
     "no-unneeded-ternary": 2,
     "no-unreachable": 2,
     "no-unused-expressions": 2,
-    "no-unused-vars": [2, {
-      "vars": "all",
-      "args": "after-used"
-    }],
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "all",
+        "args": "after-used"
+      }
+    ],
     "no-useless-call": 2,
     "no-useless-concat": 2,
     "no-void": 2,
     "no-var": 2,
-    "no-warning-comments": [1, {
-      "terms": ["todo", "fixme", "bug"],
-      "location": "anywhere"
-    }],
+    "no-warning-comments": [
+      1,
+      {
+        "terms": ["todo", "fixme", "bug"],
+        "location": "anywhere"
+      }
+    ],
     "no-with": 2,
 
     "array-bracket-spacing": [2, "never"],
@@ -149,46 +157,60 @@
     "block-spacing": 2,
     "brace-style": [2, "1tbs"],
     "callback-return": 0,
-    "camelcase": [2, {
-      "properties": "never"
-    }],
+    "camelcase": [
+      2,
+      {
+        "properties": "never"
+      }
+    ],
     "comma-dangle": [2, "never"],
     "comma-spacing": 2,
     "comma-style": 2,
-    "complexity": [1, 20], // DISCUSS
+    "complexity": [1, 20],
     "computed-property-spacing": [2, "never"],
     "consistent-return": 0,
-    "consistent-this": [0, "self"], // DISCUSS
+    "consistent-this": [0, "self"],
     "constructor-super": 2,
     "curly": [2, "all"],
     "default-case": 2,
     "dot-location": [2, "property"],
-    "dot-notation": [2, {
-      "allowKeywords": true,
-      "allowPattern": "^(catch|finally|import)$"
-    }],
-    "eol-last": 0, // DISCUSS
+    "dot-notation": [
+      2,
+      {
+        "allowKeywords": true,
+        "allowPattern": "^(catch|finally|import)$"
+      }
+    ],
+    "eol-last": 0,
     "eqeqeq": 2,
-    "func-names": 0, // DISCUSS
-    "func-style": [0, "declaration"], // DISCUSS
+    "func-names": 0,
+    "func-style": [0, "declaration"],
     "generator-star-spacing": 0,
     "global-require": 2,
-    "guard-for-in": 0, // DICUSSS
+    "guard-for-in": 0,
     "handle-callback-err": 2,
-    "indent": [0, 2], // DISCUSS
+    "indent": [0, 2],
     "init-declarations": 0,
     "jsx-quotes": [2, "prefer-double"],
-    "key-spacing": [2, {
-      "beforeColon": false,
-      "afterColon": true
-    }],
-    "lines-around-comment": 0, // DISCUSS
+    "key-spacing": [
+      2,
+      {
+        "beforeColon": false,
+        "afterColon": true
+      }
+    ],
+    "lines-around-comment": 0,
     "max-depth": [2, 4],
-    "max-len": [2, 120, 4, {
-      "ignoreComments": true,
-      "ignoreUrls": true,
-      "ignorePattern": "^import\\s.+\\sfrom\\s.+;$|function\\s[^\\(]*\\({[^}]*}\\)"
-    }],
+    "max-len": [
+      2,
+      120,
+      4,
+      {
+        "ignoreComments": true,
+        "ignoreUrls": true,
+        "ignorePattern": "^import\\s.+\\sfrom\\s.+;$|function\\s[^\\(]*\\({[^}]*}\\)"
+      }
+    ],
     "max-nested-callbacks": [2, 3],
     "max-params": [1, 5],
     "max-statements": [1, 20],
@@ -196,45 +218,48 @@
     "new-parens": 2,
     "newline-after-var": 0,
     "object-curly-spacing": [2, "always"],
-    // ES6 "object-shorthand": 2,
     "one-var": [2, "never"],
     "operator-assignment": [2, "always"],
-    "operator-linebreak": [2, "after" ],
-    "padded-blocks": [0, "never"], // DISCUSS
-    // ES6 "prefer-arrow-callback": 2,
-    // ES6 "prefer-const": 0,
-    // ES6 "prefer-spread": 2,
+    "padded-blocks": [0, "never"],
     "prefer-reflect": 0,
-    // ES6 "prefer-template": 2,
-    "quote-props": [0, "as-needed"], // DISCUSS
+    "quote-props": [0, "as-needed"],
     "quotes": [2, "single"],
     "radix": 2,
     "id-match": 2,
-    "require-jsdoc": 0, // DISCUSS
+    "require-jsdoc": 0,
     "require-yield": 2,
     "semi": 2,
-    "semi-spacing": [2, {
-      "before": false,
-      "after": true
-    }],
+    "semi-spacing": [
+      2,
+      {
+        "before": false,
+        "after": true
+      }
+    ],
     "sort-vars": 2,
     "keyword-spacing": 2,
     "space-before-blocks": [2, "always"],
-    "space-before-function-paren": [2, {
-      "anonymous": "always",
-      "named": "never"
-    }],
+    "space-before-function-paren": [
+      2,
+      {
+        "anonymous": "always",
+        "named": "never"
+      }
+    ],
     "space-in-parens": [2, "never"],
     "space-infix-ops": 2,
-    "space-unary-ops": [2, {
-      "words": true,
-      "nonwords": false
-    }],
+    "space-unary-ops": [
+      2,
+      {
+        "words": true,
+        "nonwords": false
+      }
+    ],
     "spaced-comment": 2,
     "use-isnan": 2,
     "valid-jsdoc": 2,
     "valid-typeof": 2,
-    "vars-on-top": 0, // DISCUSS
+    "vars-on-top": 0,
     "wrap-iife": [2, "inside"],
     "wrap-regex": 2,
     "yoda": [2, "never"]
