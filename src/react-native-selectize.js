@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  FlatList,
   StyleSheet,
   Text,
   TextInput,
@@ -303,6 +304,10 @@ export default class ReactNativeSelectize extends React.Component {
     return filteredItems;
   };
 
+  _keyExtractor = id => id;
+
+  _renderItem = ({ item }) => this._getRow(item);
+
   _renderItems = () => {
     const { listStyle, showItems } = this.props;
     const { hasFocus, text } = this.state;
@@ -310,7 +315,12 @@ export default class ReactNativeSelectize extends React.Component {
     const itemComponent = (
       <View>
         <View style={[styles.list, listStyle]}>
-          {items.result.map(id => this._getRow(id))}
+          <FlatList
+            data={items.result}
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+            keyboardShouldPersistTaps="always"
+          />
         </View>
       </View>
     );
