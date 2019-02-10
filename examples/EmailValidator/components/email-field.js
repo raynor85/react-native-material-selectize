@@ -2,7 +2,10 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Chip, Selectize as ChildEmailField } from 'react-native-material-selectize';
+import {
+  Chip,
+  Selectize as ChildEmailField
+} from 'react-native-material-selectize';
 
 export default class EmailField extends Component {
   static defaultProps = {
@@ -29,17 +32,22 @@ export default class EmailField extends Component {
 
   isErrored = () => {
     return !!this.state.error;
-  }
+  };
 
   validate = email => {
     const { onSubmitEditing } = this.props;
 
-    if (this.getSelectedEmails().length >= 10 && this._childEmailField.state.text) {
+    if (
+      this.getSelectedEmails().length >= 10 &&
+      this._childEmailField.state.text
+    ) {
       this.setState({ error: 'Sorry, you can enter a maximum of 10 emails' });
       onSubmitEditing(false);
       return false;
-    } else if (email === '' && this.getSelectedEmails().length ||
-              (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/).test(email.trim())) {
+    } else if (
+      (email === '' && this.getSelectedEmails().length) ||
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email.trim())
+    ) {
       // http://www.w3resource.com/javascript/form/email-validation.php
       this.setState({ error: null });
       onSubmitEditing(true);
@@ -60,7 +68,7 @@ export default class EmailField extends Component {
 
     onChipClose(!error && this.getSelectedEmails().length > 1);
     onClose();
-  }
+  };
 
   render() {
     const { items } = this.props;
@@ -69,7 +77,7 @@ export default class EmailField extends Component {
     return (
       <View>
         <ChildEmailField
-          ref={c => this._childEmailField = c}
+          ref={c => (this._childEmailField = c)}
           containerStyle={styles.container}
           chipStyle={styles.chip}
           chipIconStyle={styles.chipIcon}
@@ -87,10 +95,11 @@ export default class EmailField extends Component {
           }}
           renderRow={(id, onPress, item) => (
             <TouchableOpacity
-                activeOpacity={0.6}
-                key={id}
-                onPress={onPress}
-                style={styles.listRow}>
+              activeOpacity={0.6}
+              key={id}
+              onPress={onPress}
+              style={styles.listRow}
+            >
               <View style={styles.listWrapper}>
                 <View style={styles.listIcon}>
                   <Text style={styles.listInitials}>{item.initials}</Text>
