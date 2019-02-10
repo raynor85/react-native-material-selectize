@@ -78,7 +78,6 @@ export default class EmailField extends Component {
       <View>
         <ChildEmailField
           ref={c => (this._childEmailField = c)}
-          containerStyle={styles.container}
           chipStyle={styles.chip}
           chipIconStyle={styles.chipIcon}
           error={error}
@@ -121,16 +120,13 @@ export default class EmailField extends Component {
             />
           )}
         />
-        <Text>Content which is covered</Text>
+        <Text style={styles.coveredContent}>Content which is covered</Text>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    zIndex: 1
-  },
   chip: {
     paddingRight: 2
   },
@@ -173,5 +169,8 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.54)',
     fontSize: 14,
     lineHeight: 21
+  },
+  coveredContent: {
+    zIndex: -1
   }
 });
