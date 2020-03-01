@@ -73,7 +73,14 @@ declare module 'react-native-material-selectize' {
     clearSelectedItems: () => void;
   }
 
-  class Chip extends Component<any> {}
+  export interface ChipProps {
+    iconStyle?: StyleProp<ImageStyle>;
+    onClose?: () => void;
+    text?: string;
+    style?: StyleProp<ViewStyle>;
+  }
+
+  class Chip extends Component<ChipProps> {}
 
   export { Chip, Selectize };
 }
