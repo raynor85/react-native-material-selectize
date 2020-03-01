@@ -3,6 +3,7 @@
   "version": "1.16.1",
   "description": "A React Native component inspired to Selectize which follows Material Design guidelines.",
   "main": "index.js",
+  "types": "./src/index.d.ts",
   "scripts": {
     "lint": "eslint ./",
     "fix": "eslint ./ --fix"

@@ -31,14 +31,12 @@ export default class ReactNativeChip extends React.PureComponent {
           </Text>
           <TouchableOpacity
             style={[styles.iconWrapper, iconStyle]}
-            onPress={onClose}
-          >
+            onPress={onClose}>
             <Text
               style={[
                 styles.icon,
                 this.isIOS ? styles.iconIOS : styles.iconAndroid
-              ]}
-            >
+              ]}>
               ✕
             </Text>
           </TouchableOpacity>
