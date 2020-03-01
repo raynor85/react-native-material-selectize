@@ -23,7 +23,6 @@ const SHOWITEMS = {
 
 export default class ReactNativeSelectize extends React.Component {
   static propTypes = {
-    autoReflow: PropTypes.bool,
     chipStyle: ViewPropTypes.style,
     chipIconStyle: ViewPropTypes.style,
     containerStyle: ViewPropTypes.style,
@@ -32,18 +31,19 @@ export default class ReactNativeSelectize extends React.Component {
     listRowStyle: ViewPropTypes.style,
     itemId: PropTypes.string,
     items: PropTypes.array,
+    selectedItems: PropTypes.array,
     label: PropTypes.string,
     error: PropTypes.string,
     errorColor: PropTypes.string,
     tintColor: PropTypes.string,
     baseColor: PropTypes.string,
-    selectedItems: PropTypes.array,
     showItems: PropTypes.oneOf([
       SHOWITEMS.ONFOCUS,
       SHOWITEMS.ONTYPING,
       SHOWITEMS.ALWAYS,
       SHOWITEMS.NEVER
     ]),
+    autoReflow: PropTypes.bool,
     trimOnSubmit: PropTypes.bool,
     renderRow: PropTypes.func,
     renderChip: PropTypes.func,
@@ -68,8 +68,7 @@ export default class ReactNativeSelectize extends React.Component {
         activeOpacity={0.6}
         key={id}
         onPress={onPress}
-        style={[styles.listRow, style]}
-      >
+        style={[styles.listRow, style]}>
         <Text style={{ color: 'rgba(0, 0, 0, 0.87)' }}>{id}</Text>
       </TouchableOpacity>
     ),
@@ -416,8 +415,7 @@ export default class ReactNativeSelectize extends React.Component {
             styles.inputContainer,
             inputContainerBorderStyle,
             inputContainerStyle
-          ]}
-        >
+          ]}>
           {selectedItems.result.map(id =>
             renderChip(
               id,

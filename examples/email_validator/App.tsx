@@ -1,5 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { ScrollView, StyleSheet, Text, View, Button } from 'react-native';
+import { Selectize } from 'react-native-material-selectize';
+
 import EmailField from './components/email-field';
 
 export interface Item {
@@ -39,7 +41,7 @@ const items: Item[] = [
 const App = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [message, setMessage] = useState('');
-  const childEmailFieldRef = useRef<any>(null);
+  const childEmailFieldRef = useRef<Selectize<'email', Item[]>>(null);
   const cancelMessageInterval = useRef<number>(0);
 
   const handleSubmitEditing = useCallback(

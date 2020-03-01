@@ -8,14 +8,13 @@ import {
   ViewStyle,
   ImageStyle
 } from 'react-native';
-// @ts-ignore
 import { Chip, Selectize } from 'react-native-material-selectize';
 
 import { Item } from '../App';
 
 interface Props {
   items: Item[];
-  itemId: string;
+  itemId: 'email';
   onChipClose: (is: boolean) => void;
   onSubmitEditing: (submit: boolean) => void;
   selectizeRef: React.MutableRefObject<any>;
