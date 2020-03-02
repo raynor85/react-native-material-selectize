@@ -27,6 +27,7 @@ export default class ReactNativeSelectize extends React.Component {
     chipIconStyle: ViewPropTypes.style,
     containerStyle: ViewPropTypes.style,
     inputContainerStyle: ViewPropTypes.style,
+    labelStyle: ViewPropTypes.style,
     listStyle: ViewPropTypes.style,
     listRowStyle: ViewPropTypes.style,
     itemId: PropTypes.string,
@@ -371,6 +372,7 @@ export default class ReactNativeSelectize extends React.Component {
       chipIconStyle,
       containerStyle,
       inputContainerStyle,
+      labelStyle,
       textInputProps,
       errorColor,
       renderChip,
@@ -393,7 +395,11 @@ export default class ReactNativeSelectize extends React.Component {
       borderBottomColor: this._getColor(),
       ...this._getLineStyleVariant()
     };
-    const labelStyle = [styles.label, { color: this._getColor() }];
+    const computedLabelStyle = [
+      styles.label,
+      { color: this._getColor() },
+      labelStyle
+    ];
     const textInputStyle = {
       ...StyleSheet.flatten(styles.textInput),
       ...textInputStyleFromProps,
@@ -409,7 +415,7 @@ export default class ReactNativeSelectize extends React.Component {
 
     return (
       <View style={[styles.container, containerStyle]}>
-        {!!label && <Text style={labelStyle}>{label}</Text>}
+        {!!label && <Text style={computedLabelStyle}>{label}</Text>}
         <View
           style={[
             styles.inputContainer,

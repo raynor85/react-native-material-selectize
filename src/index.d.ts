@@ -3,6 +3,7 @@ declare module 'react-native-material-selectize' {
   import {
     StyleProp,
     ViewStyle,
+    TextStyle,
     TextInputProps,
     ImageStyle
   } from 'react-native';
@@ -25,6 +26,7 @@ declare module 'react-native-material-selectize' {
     chipIconStyle?: StyleProp<ViewStyle>;
     containerStyle?: StyleProp<ViewStyle>;
     inputContainerStyle?: StyleProp<ViewStyle>;
+    labelStyle?: StyleProp<TextStyle>;
     listStyle?: StyleProp<ViewStyle>;
     listRowStyle?: StyleProp<ViewStyle>;
     itemId?: ItemId;
